@@ -1,8 +1,10 @@
+import AboutMe from "./components/AboutMe.tsx";
+
 function App() {
 
   return (
     <>
-      <h1>Demo text</h1>
+      <AboutMe />
     </>
   )
 }
