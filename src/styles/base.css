@@ -1,0 +1,7 @@
+@layer base {
+    body {
+        background: var(--desktop-bg);
+        color: var(--text);
+        font-family: var(--font-ui);
+    }
+}

@@ -1,1 +1,6 @@
 @import "tailwindcss";
+@import "styles/tokens.css";
+@import "./styles/base.css";
+
+@import "@fontsource/pixelify-sans/400.css";
+@import "@fontsource/jersey-10/400.css";

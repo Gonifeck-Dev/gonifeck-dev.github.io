@@ -1,0 +1,29 @@
+:root {
+    --desktop-bg:           #0B0820;
+    --desktop-text:         #F2ECFF;
+    --field-bg:             #0E0A1F;
+
+    --chrome-face:          #241B3D;
+    --chrome-highlight:     #8C7FC0;
+    --chrome-light:         #3A2F5E;
+    --chrome-shadow:        #0A0714;
+    --chrome-dark-shadow:   #000000;
+
+    --text:                 #F2ECFF;
+    --text-muted:           #C2B6E8;
+    --text-inverted:        #FFFFFF;
+
+    --title-active-start:   #2B1466;
+    --title-active-end:     #C2185B;
+    --title-inactive-start: #2A2240;
+    --title-inactive-end:   #3A3058;
+    --title-inactive-text:  #B9B0D8;
+
+    --accent:               #FF4FA3;
+    --link:                 #8FD3FF;
+    --selection-bg:         #C2185B;
+    --tooltip-bg:           #FFFFE1;
+    --tooltip-text:         #111111;
+    --font-ui: "Pixelify Sans", monospace;
+    --font-display: "Jersey 10", monospace;
+}
