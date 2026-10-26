@@ -1,29 +1,31 @@
 :root {
-    --desktop-bg:           #0B0820;
-    --desktop-text:         #F2ECFF;
-    --field-bg:             #0E0A1F;
+    --desktop-bg:               #1A0F1E;
+    --desktop-text:             #FFF0E0;
+    --field-bg:                 #1C1018;
 
-    --chrome-face:          #241B3D;
-    --chrome-highlight:     #8C7FC0;
-    --chrome-light:         #3A2F5E;
-    --chrome-shadow:        #0A0714;
-    --chrome-dark-shadow:   #000000;
+    --chrome-face:              #3A2433;
+    --chrome-highlight:         #B98AA0;
+    --chrome-light:             #4E3044;
+    --chrome-shadow:            #170B14;
+    --chrome-dark-shadow:       #000000;
 
-    --text:                 #F2ECFF;
-    --text-muted:           #C2B6E8;
-    --text-inverted:        #FFFFFF;
+    --text:                     #FFF0E0;
+    --text-muted:               #E5C7C9;
+    --text-inverted:            #FFFFFF;
 
-    --title-active-start:   #2B1466;
-    --title-active-end:     #C2185B;
-    --title-inactive-start: #2A2240;
-    --title-inactive-end:   #3A3058;
-    --title-inactive-text:  #B9B0D8;
+    --title-active-start:       #5B1E5E;
+    --title-active-end:         #C24A1E;
+    --title-inactive-start:     #33202D;
+    --title-inactive-end:       #4A2E40;
+    --title-inactive-text:      #C9A9B8;
 
-    --accent:               #FF4FA3;
-    --link:                 #8FD3FF;
-    --selection-bg:         #C2185B;
-    --tooltip-bg:           #FFFFE1;
-    --tooltip-text:         #111111;
+    --accent:                   #FFB45E;
+    --link:                     #8FD3FF;
+    --selection-bg:             #C24A1E;
+    --tooltip-bg:               #FFF4D6;
+    --tooltip-text:             #2A1C12;
+
     --font-ui: "Pixelify Sans", monospace;
     --font-display: "Jersey 10", monospace;
+
 }

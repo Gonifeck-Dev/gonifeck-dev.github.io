@@ -3,6 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      if (window.matchMedia("(prefers-color-scheme: light)").matches) {
+        document.documentElement.dataset.theme = "day";
+      }
+    </script>
     <title>Gonifeck-DEV</title>
   </head>
   <body>
