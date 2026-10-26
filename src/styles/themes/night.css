@@ -1,0 +1,25 @@
+:root, [data-theme="night"] {
+    --desktop-bg: #1A0F1E;
+    --desktop-text: #FFF0E0;
+    --field-bg: #1C1018;
+    --chrome-face: #3A2433;
+    --chrome-highlight: #B98AA0;
+    --chrome-light: #4E3044;
+    --chrome-shadow: #170B14;
+    --chrome-dark-shadow: #000000;
+    --text: #FFF0E0;
+    --text-muted: #E5C7C9;
+    --text-inverted: #FFFFFF;
+    --title-active-start: #5B1E5E;
+    --title-active-end: #C24A1E;
+    --title-inactive-start: #33202D;
+    --title-inactive-end: #4A2E40;
+    --title-inactive-text: #C9A9B8;
+    --accent: #FFB45E;
+    --link: #8FD3FF;
+    --selection-bg: #C24A1E;
+    --tooltip-bg: #FFF4D6;
+    --tooltip-text: #2A1C12;
+    --fog: #FFB45E;
+    --desktop-bg-end: #3A1A2E;
+}
