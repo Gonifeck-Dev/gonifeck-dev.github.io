@@ -1,3 +1,4 @@
+import "./AppWindow.css"
 import Button from "./Button"
 import type { ReactNode } from "react"
 

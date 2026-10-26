@@ -1,3 +1,4 @@
+import "./AboutMe.css"
 import Button from "./Button"
 import AppWindow from "./AppWindow"
 

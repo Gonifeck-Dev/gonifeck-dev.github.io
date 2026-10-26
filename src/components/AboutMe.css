@@ -1,0 +1,31 @@
+.aboutme{
+    background: var(--field-bg);
+    box-shadow: var(--bevel-sunken);
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.aboutme-name{
+    font-family: var(--font-display), serif;
+    font-size: 37.333px;
+    line-height: 0.8
+}
+
+.aboutme-role{
+    font-size: 18px;
+    color: var(--accent)
+}
+
+.aboutme-command, .aboutme-subtitle{
+    color: var(--text-muted)
+}
+
+.aboutme-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+}
+

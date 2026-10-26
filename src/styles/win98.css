@@ -11,6 +11,12 @@
             inset 1px 1px var(--chrome-dark-shadow),
             inset -2px -2px var(--chrome-light),
             inset 2px 2px var(--chrome-shadow);
+
+    --bevel-window:
+            inset -1px -1px var(--chrome-dark-shadow),
+            inset 1px 1px var(--chrome-light),
+            inset -2px -2px var(--chrome-shadow),
+            inset 2px 2px var(--chrome-highlight);
 }
 
 @layer components {
