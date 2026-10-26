@@ -1,0 +1,23 @@
+:root {
+    --bevel-raised:
+            inset -1px -1px var(--chrome-dark-shadow),
+            inset 1px 1px var(--chrome-highlight),
+            inset -2px -2px var(--chrome-shadow),
+            inset 2px 2px var(--chrome-light);
+
+
+    --bevel-sunken:
+            inset -1px -1px var(--chrome-highlight),
+            inset 1px 1px var(--chrome-dark-shadow),
+            inset -2px -2px var(--chrome-light),
+            inset 2px 2px var(--chrome-shadow);
+}
+
+@layer components {
+    .bevel-raised {
+        box-shadow: var(--bevel-raised);
+    }
+    .bevel-sunken {
+        box-shadow: var(--bevel-sunken);
+    }
+}

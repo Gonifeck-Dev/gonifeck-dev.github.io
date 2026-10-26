@@ -1,0 +1,39 @@
+@layer components {
+    .button {
+        background: var(--chrome-face);
+        color: var(--text);
+        border: none;
+        font: inherit;
+        padding: 4px 12px;
+        min-width: 75px;
+        min-height: 23px;
+        white-space: nowrap;
+
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+
+        cursor: pointer;
+    }
+    .button:hover {
+        transform: translateY(-1px);
+    }
+
+    .button:active {
+        box-shadow: var(--bevel-sunken);
+        transform: none;
+    }
+
+    .button:focus-visible{
+        outline: 1px dotted var(--text);
+        outline-offset: -2px;
+    }
+
+    .button-small {
+        min-width: 28px;
+        min-height: 26px;
+        padding: 0;
+    }
+
+}
