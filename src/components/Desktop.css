@@ -1,4 +1,4 @@
-@layer Components {
+@layer components {
     .desktop {
         position: relative;
         min-height: 100vh;
@@ -8,8 +8,9 @@
         position: fixed;
         inset: 0;
         z-index: -1;
-        background: linear-gradient(160deg,
-        var(--desktop-bg),
-        var(--desktop-bg-end))
+        background:
+                linear-gradient(160deg,
+                var(--desktop-bg),
+                var(--desktop-bg-end));
     }
 }
