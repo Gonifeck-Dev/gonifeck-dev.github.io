@@ -1,12 +1,11 @@
 @layer components {
     .window {
         background: var(--chrome-face);
-        box-shadow:
-                var(--bevel-window),
-                4px 4px 0 color-mix(in oklab, var(--chrome-dark-shadow) 30%, transparent),            /* sombra dura desplazada */
-                0 14px 28px -10px color-mix(in oklab, var(--chrome-dark-shadow) 55%, transparent),    /* sombra ambiente, suave */
-                0 0 28px 15px  color-mix(in oklab, var(--fog) 9%,  transparent),
-                0 0 28px 19px color-mix(in oklab, var(--fog) 8%,  transparent);        /* halación: brillo cálido */
+        box-shadow: var(--bevel-window),
+        4px 4px 0 color-mix(in oklab, var(--chrome-dark-shadow) 30%, transparent),
+        0 14px 28px -10px color-mix(in oklab, var(--chrome-dark-shadow) 55%, transparent),
+        0 0 28px 15px color-mix(in oklab, var(--fog) 9%, transparent),
+        0 0 28px 19px color-mix(in oklab, var(--fog) 8%, transparent);
 
         padding: 3px;
         display: flex;
@@ -24,32 +23,32 @@
         background: linear-gradient(90deg, var(--title-active-start), var(--title-active-end));
     }
 
-    .window-title{
+    .window-title {
         flex: 1;
     }
 
-    .window-controls{
+    .window-controls {
         display: flex;
         gap: 2px;
     }
 
-    .window-menu{
+    .window-menu {
         display: flex;
         gap: 12px;
         padding: 2px 6px;
     }
 
-    .window-status{
+    .window-status {
         display: flex;
         gap: 2px;
     }
 
-    .window-status-item{
+    .window-status-item {
         box-shadow: var(--bevel-sunken);
         padding: 2px 6px;
     }
 
-    .window-status-item:first-child{
+    .window-status-item:first-child {
         flex: 1;
     }
 }
