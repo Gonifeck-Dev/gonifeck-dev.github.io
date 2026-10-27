@@ -1,5 +1,5 @@
 :root {
     --font-ui: "Pixelify Sans", monospace;
     --font-display: "Jersey 10", monospace;
-
+    --crt-frame: 13px;
 }

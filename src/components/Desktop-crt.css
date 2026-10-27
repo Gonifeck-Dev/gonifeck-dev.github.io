@@ -1,0 +1,57 @@
+@layer components {
+    /* Vidrio CRT: encima de todo y sin capturar clics. Capas: viñeta, scanlines. */
+    .desktop-crt {
+        position: fixed;
+        inset: var(--crt-frame);
+        z-index: 1000;
+        pointer-events: none;
+        overflow: hidden;
+        border-radius: 19px;
+        background:
+                radial-gradient(ellipse at center, transparent 60%, color-mix(in oklab, var(--chrome-dark-shadow) 15%, transparent)),  /* viñeta */
+                repeating-linear-gradient(0deg, color-mix(in oklab, var(--fog) 10%, transparent) 0 1px, transparent 1px 2px);  /* scanlines */
+        box-shadow:
+                inset 0 0 40px color-mix(in oklab, var(--chrome-dark-shadow) 80%, transparent),
+                0 0 0 2px var(--chrome-shadow),
+                0 0 0 4px var(--chrome-light),
+                0 0 0 100vmax var(--chrome-face);
+        /* sombra interior de borde + marco del monitor */
+    }
+
+    /* Ruido/estática: SVG feTurbulence en data URI (~0,4 KB), se rasteriza una vez */
+    .desktop-crt::before {
+        content: "";
+        position: absolute;
+        inset: -64px;
+        opacity: 0.04;
+        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E") 0 0 / 180px 180px;
+    }
+
+    /* Barra de barrido: una franja clara que baja (solo transform) */
+    .desktop-crt::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, transparent, color-mix(in oklab, var(--text-inverted) 5%, transparent) 50%, transparent) 0 0 / 100% 12% no-repeat;
+        animation: crt-barrido 9s linear infinite;
+    }
+
+    /* Fósforo: resplandor cálido del texto (text-shadow, barato) */
+    .desktop :is(p, h1, h2, li, span, button) {
+        text-shadow: 0 0 6px color-mix(in oklab, var(--fog) 25%, transparent);
+    }
+
+    @keyframes crt-barrido {
+        from { transform: translateY(-100%); }
+        to { transform: translateY(100%); }
+    }
+
+    /* Movimiento reducido: el vidrio queda quieto */
+    @media (prefers-reduced-motion: reduce) {
+        .desktop-crt,
+        .desktop-crt::before,
+        .desktop-crt::after {
+            animation: none;
+        }
+    }
+}

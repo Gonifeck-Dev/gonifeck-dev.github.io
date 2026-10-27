@@ -2,6 +2,7 @@
     .desktop {
         position: relative;
         min-height: 100vh;
+        padding: var(--crt-frame);
     }
 
     .desktop-wall {
