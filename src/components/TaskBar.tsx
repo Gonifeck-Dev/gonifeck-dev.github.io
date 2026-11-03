@@ -1,5 +1,5 @@
 import type {ReactNode} from "react";
-import "./TaskBar.css"
+import "./TaskBar.css";
 import Button from "./Button.tsx";
 
 type TaskBarProps = {
@@ -10,12 +10,11 @@ function TaskBar({children}: TaskBarProps) {
     return (
         <div className="taskbar">
             <div className="taskbar-start">
-                <Button variant={"normal"} label="Inicio" action={() => {
-                }}/>
+                <Button variant="normal" label="Inicio" action={() => {}}/>
             </div>
-            <div className="taskbar-spacer" aria-hidden="true"/>
+            <div className="taskbar-separator" aria-hidden="true"/>
             <div className="taskbar-task">{children}</div>
-            <div className="taskbar-spacer" aria-hidden="true"/>
+            <div className="taskbar-separator" aria-hidden="true"/>
             <div className="taskbar-tray">
                 4:20 PM
             </div>

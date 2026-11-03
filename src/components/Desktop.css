@@ -1,8 +1,9 @@
 @layer components {
     .desktop {
-        position: relative;
-        min-height: 100vh;
-        padding: calc(var(--crt-frame) - 3px);
+        position: fixed;
+        inset: var(--desktop-inset);
+        border-radius: var(--crt-radius);
+        overflow: hidden;
     }
 
     .desktop-wall {
@@ -12,5 +13,9 @@
         background: linear-gradient(160deg,
         var(--desktop-bg),
         var(--desktop-bg-end));
+    }
+
+    .desktop-windows {
+        isolation: isolate;
     }
 }
