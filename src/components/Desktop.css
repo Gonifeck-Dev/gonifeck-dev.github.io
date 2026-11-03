@@ -18,4 +18,9 @@
     .desktop-windows {
         isolation: isolate;
     }
+
+    /* z-index solo funciona en elementos posicionados */
+    .desktop-window {
+        position: relative;
+    }
 }
