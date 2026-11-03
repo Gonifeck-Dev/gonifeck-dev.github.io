@@ -1,0 +1,36 @@
+@layer components {
+    .taskbar {
+        background: var(--chrome-face);
+        color: var(--text);
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 3;
+        padding: 3px;
+        margin: 0 calc(var(--crt-frame) - 4px) calc(var(--crt-frame) - 5px) calc(var(--crt-frame) - 4px);
+        display: flex;
+        align-items: center;
+        font-size: 13px;
+        box-shadow: var(--bevel-raised);
+    }
+
+    .taskbar-spacer {
+        border-left: 1px solid var(--chrome-shadow);
+        border-right: 1px solid var(--chrome-highlight);
+        align-self: stretch;
+        margin: 5px;
+    }
+
+    .taskbar-task {
+        display: flex;
+        flex: 1;
+        gap: 1px;
+    }
+
+    .taskbar-tray {
+        box-shadow: var(--bevel-sunken);
+        padding: 4px;
+
+    }
+}
