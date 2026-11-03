@@ -46,7 +46,7 @@ function Desktop() {
             <LightBeam/>
             <div className="desktop-windows">
                 {windows.map(w => (
-                    <div key={w.id} className="desktop-window" style={{zIndex: w.z}}
+                    <div key={w.id} className="desktop-window-slot" style={{zIndex: w.z}}
                          hidden={w.minimized}
                          onPointerDown={e => {
                              e.stopPropagation()

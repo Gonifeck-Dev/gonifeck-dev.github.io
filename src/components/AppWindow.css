@@ -12,6 +12,7 @@
         flex-direction: column;
         gap: 2px;
         width: 640px;
+        pointer-events: auto;
     }
 
     .window-title-bar {

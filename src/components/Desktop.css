@@ -19,8 +19,8 @@
         isolation: isolate;
     }
 
-    /* z-index solo funciona en elementos posicionados */
-    .desktop-window {
+    .desktop-window-slot {
         position: relative;
+        pointer-events: none;
     }
 }
