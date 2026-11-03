@@ -9,7 +9,10 @@ type ButtonProps = {
     pressed?: boolean
     label?: string
     icon?: string
-    action: () => void
+    action?: () => void
+    href?: string
+    newTab?: boolean
+    download?: boolean
 }
 
 const variantClasses: Record<Variant, string> = {
@@ -24,15 +27,27 @@ const emphasisClasses: Record<Emphasis, string> = {
     secondary: "button-secondary",
 }
 
-function Button({ variant, emphasis, pressed, label, icon, action }: ButtonProps) {
+function Button({variant, emphasis, pressed, label, icon, action, href, newTab, download}: ButtonProps) {
     const className =
         variantClasses[variant] +
         (emphasis ? " " + emphasisClasses[emphasis] : "") +
         (pressed ? " bevel-sunken" : " bevel-raised")
 
+    if (href) {
+        return (
+            <a className={className} href={href}
+               target={newTab ? "_blank" : undefined}
+               rel={newTab ? "noopener noreferrer" : undefined}
+               download={download || undefined}>
+                {icon && <img src={icon} alt=""/>}
+                {label}
+            </a>
+        )
+    }
+
     return (
         <button className={className} onClick={action}>
-            {icon && <img src={icon} alt="" />}
+            {icon && <img src={icon} alt=""/>}
             {label}
         </button>
     )

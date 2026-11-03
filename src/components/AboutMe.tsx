@@ -32,9 +32,12 @@ function AboutMe() {
                 <h2 className="aboutme-role">{aboutMeInfo.role}</h2>
                 <p className="aboutme-text">{aboutMeInfo.text}</p>
                 <div className="aboutme-buttons">
-                    <Button variant="normal" emphasis="primary" label="Descargar CV" action={() => {}} />
-                    <Button variant="normal" label="Ver Proyectos" action={() => {}} />
-                    <Button variant="normal" label="Contacto" action={() => {}} />
+                    <Button variant="normal" emphasis="primary" label="Descargar CV"
+                            href="/main_fullstack_es.pdf" download/>
+                    <Button variant="normal" label="Ver Proyectos"
+                            href="https://github.com/Gonifeck-Dev" newTab/>
+                    <Button variant="normal" label="Contacto"
+                            href="mailto:gonzalo.fclopez@gmail.com"/>
                 </div>
             </div>
         </AppWindow>
