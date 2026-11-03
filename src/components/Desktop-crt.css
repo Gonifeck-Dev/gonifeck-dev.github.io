@@ -6,15 +6,15 @@
         z-index: 1000;
         pointer-events: none;
         overflow: hidden;
-        border-radius: 19px;
-        background:
-                radial-gradient(ellipse at center, transparent 60%, color-mix(in oklab, var(--chrome-dark-shadow) 15%, transparent)),  /* viñeta */
-                repeating-linear-gradient(0deg, color-mix(in oklab, var(--fog) 10%, transparent) 0 1px, transparent 1px 2px);  /* scanlines */
-        box-shadow:
-                inset 0 0 40px color-mix(in oklab, var(--chrome-dark-shadow) 80%, transparent),
-                0 0 0 2px var(--chrome-shadow),
-                0 0 0 4px var(--chrome-light),
-                0 0 0 100vmax var(--chrome-face);
+        border-radius: var(--crt-radius);
+        background: radial-gradient(ellipse at center, transparent 60%,
+        color-mix(in oklab, var(--chrome-dark-shadow) 15%, transparent)),
+        repeating-linear-gradient(0deg, color-mix(in oklab, var(--fog) 10%, transparent) 0 1px, transparent 1px 2px);
+
+        box-shadow: inset 0 0 40px color-mix(in oklab, var(--chrome-dark-shadow) 80%, transparent),
+        0 0 0 2px var(--chrome-shadow),
+        0 0 0 4px var(--chrome-light),
+        0 0 0 100vmax var(--chrome-face);
         /* sombra interior de borde + marco del monitor */
     }
 
@@ -42,8 +42,12 @@
     }
 
     @keyframes crt-barrido {
-        from { transform: translateY(-100%); }
-        to { transform: translateY(100%); }
+        from {
+            transform: translateY(-100%);
+        }
+        to {
+            transform: translateY(100%);
+        }
     }
 
     /* Movimiento reducido: el vidrio queda quieto */

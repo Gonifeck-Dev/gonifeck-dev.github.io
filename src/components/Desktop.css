@@ -2,16 +2,15 @@
     .desktop {
         position: relative;
         min-height: 100vh;
-        padding: var(--crt-frame);
+        padding: calc(var(--crt-frame) - 3px);
     }
 
     .desktop-wall {
         position: fixed;
         inset: 0;
         z-index: -2;
-        background:
-                linear-gradient(160deg,
-                var(--desktop-bg),
-                var(--desktop-bg-end));
+        background: linear-gradient(160deg,
+        var(--desktop-bg),
+        var(--desktop-bg-end));
     }
 }
