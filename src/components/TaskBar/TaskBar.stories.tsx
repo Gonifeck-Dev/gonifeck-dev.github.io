@@ -1,0 +1,55 @@
+import type {Meta, StoryObj} from "@storybook/react-vite";
+import TaskBar from "./TaskBar.tsx";
+import Button from "../Button/Button.tsx";
+
+const meta = {
+    title: "Escritorio/Barra de tareas",
+    component: TaskBar,
+    tags: ["autodocs"],
+    // La barra se pega abajo con position: absolute; esta caja simula el escritorio
+    decorators: [
+        (Story) => (
+            <div style={{
+                position: "relative",
+                width: 800,
+                height: 120,
+                background: "var(--desktop-bg)",
+            }}>
+                <Story/>
+            </div>
+        ),
+    ],
+    argTypes: {
+        children: {control: false, description: "Botones de tareas: uno por ventana abierta"},
+    },
+} satisfies Meta<typeof TaskBar>;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+// Solo Inicio, separadores y reloj
+export const SinTareas: Story = {
+    name: "Sin tareas",
+};
+
+// La tarea de la ventana activa se ve hundida
+export const UnaTareaActiva: Story = {
+    name: "Una tarea activa",
+    args: {
+        children: <Button variant="normal" label="Símbolo de MS-DOS" pressed/>,
+    },
+};
+
+// Varias ventanas abiertas: una activa y el resto normales
+export const VariasTareas: Story = {
+    name: "Varias tareas",
+    args: {
+        children: (
+            <>
+                <Button variant="normal" label="Símbolo de MS-DOS" pressed/>
+                <Button variant="normal" label="Bloc de notas"/>
+                <Button variant="normal" label="foto.png"/>
+            </>
+        ),
+    },
+};
