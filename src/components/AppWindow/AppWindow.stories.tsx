@@ -1,6 +1,5 @@
 import type {Meta, StoryObj} from "@storybook/react-vite";
 import AppWindow from "./AppWindow.tsx";
-import AboutMe from "../AboutMe/AboutMe.tsx";
 
 const meta = {
     title: "Escritorio/Ventana",
@@ -43,19 +42,3 @@ export const SinMenuNiEstado: Story = {
     args: {title: "foto.png"},
 };
 
-// La ventana real de "Sobre mí", con su contenido
-export const ConSobreMi: Story = {
-    name: "Con Sobre mí",
-    args: {
-        title: "Símbolo de MS-DOS",
-        menus: [
-            {title: "Archivo", options: []},
-            {title: "Editar", options: []},
-            {title: "Ver", options: []},
-            {title: "Ayuda", options: []},
-        ],
-        status: {text: "Listo · Disponible para trabajar", easterEggs: "Secretos: 0/5"},
-        field: true,
-        children: <AboutMe/>,
-    },
-};

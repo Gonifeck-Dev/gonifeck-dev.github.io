@@ -6,14 +6,16 @@ import TaskBar from "../TaskBar/TaskBar.tsx";
 import Button from "../Button/Button.tsx";
 import AppWindow from "../AppWindow/AppWindow.tsx";
 import type {MenuData, StatusData} from "../AppWindow/AppWindow.tsx";
-import AboutMe from "../AboutMe/AboutMe.tsx";
 
-type AppData = {
+// Contrato: la forma que debe tener cada app que se le entregue al escritorio.
+// El catálogo (src/app/catalog.tsx) lo cumple; Desktop no conoce ninguna feature.
+export type AppData = {
     id: string
     title: string
     menus?: MenuData[]
     status?: StatusData
     field?: boolean
+    openAtStart?: boolean
     content: ReactNode
 }
 
@@ -23,28 +25,24 @@ type WindowState = {
     minimized: boolean
 }
 
+type DesktopProps = {
+    apps: AppData[]
+}
 
-const apps: AppData[] = [
-    {
-        id: "about",
-        title: "Símbolo de MS-DOS",
-        menus: [
-            {title: "Archivo", options: []},
-            {title: "Editar", options: []},
-            {title: "Ver", options: []},
-            {title: "Ayuda", options: []},
-        ],
-        status: {text: "Listo · Disponible para trabajar", easterEggs: "Secretos: 0/5"},
-        field: true,
-        content: <AboutMe/>,
-    },
-]
+function Desktop({apps}: DesktopProps) {
+    // Al cargar se abren las apps marcadas con openAtStart, en el orden del catálogo
+    const [windows, setWindows] = useState<WindowState[]>(() =>
+        apps
+            .filter(app => app.openAtStart)
+            .map((app, i) => ({id: app.id, z: i + 1, minimized: false}))
+    )
+    const [activeId, setActiveId] = useState<string | null>(() =>
+        apps.find(app => app.openAtStart)?.id ?? null
+    )
 
-function Desktop() {
-    const [windows, setWindows] = useState<WindowState[]>([
-        {id: "about", z: 1, minimized: false},
-    ])
-    const [activeId, setActiveId] = useState<string | null>("about")
+    function getApp(id: string) {
+        return apps.find(app => app.id === id)
+    }
 
     function activate(id: string) {
         const topZ = Math.max(...windows.map(w => w.z))
@@ -60,7 +58,7 @@ function Desktop() {
             <LightBeam/>
             <div className="desktop-windows">
                 {windows.map(w => {
-                    const app = apps.find(a => a.id === w.id)
+                    const app = getApp(w.id)
                     if (!app) return null
                     return (
                         <div key={w.id} className="desktop-window-slot" style={{zIndex: w.z}}
@@ -79,7 +77,7 @@ function Desktop() {
             <TaskBar>
                 {windows.map(w => (
                     <Button key={w.id} variant="normal"
-                            label={apps.find(app => app.id === w.id)?.title}
+                            label={getApp(w.id)?.title}
                             pressed={w.id === activeId}
                             action={() => activate(w.id)}/>
                 ))}
