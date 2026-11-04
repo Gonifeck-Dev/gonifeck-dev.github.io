@@ -1,8 +1,8 @@
-import type {ReactNode} from "react";
-import "./Monitor.css";
+import type {ReactNode} from "react"
+import "./Monitor.css"
 
 type MonitorProps = {
-    children?: ReactNode;
+    children?: ReactNode
 }
 
 function Monitor({children}: MonitorProps) {
@@ -15,4 +15,4 @@ function Monitor({children}: MonitorProps) {
     )
 }
 
-export default Monitor;
+export default Monitor

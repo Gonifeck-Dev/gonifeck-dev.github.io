@@ -1,6 +1,6 @@
-import Desktop from "../components/Desktop/Desktop.tsx";
-import Monitor from "../components/Monitor/Monitor.tsx";
-import {apps} from "./catalog.tsx";
+import Desktop from "@/features/desktop/components/Desktop.tsx"
+import Monitor from "@/components/Monitor/Monitor.tsx"
+import {apps} from "./catalog.tsx"
 
 function App() {
     return (

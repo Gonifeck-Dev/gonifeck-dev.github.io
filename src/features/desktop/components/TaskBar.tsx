@@ -1,9 +1,9 @@
-import type {ReactNode} from "react";
-import "./TaskBar.css";
-import Button from "../Button/Button.tsx";
+import type {ReactNode} from "react"
+import "./TaskBar.css"
+import Button from "@/components/Button/Button.tsx"
 
 type TaskBarProps = {
-    children?: ReactNode;
+    children?: ReactNode
 }
 
 function TaskBar({children}: TaskBarProps) {
@@ -23,4 +23,4 @@ function TaskBar({children}: TaskBarProps) {
     )
 }
 
-export default TaskBar;
+export default TaskBar

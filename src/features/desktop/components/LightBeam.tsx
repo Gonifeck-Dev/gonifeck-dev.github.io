@@ -8,7 +8,7 @@ function LightBeam() {
             <div className="light-beam-pane"/>
             <div className="light-beam-pane"/>
         </div>
-    );
+    )
 }
 
-export default LightBeam;
+export default LightBeam

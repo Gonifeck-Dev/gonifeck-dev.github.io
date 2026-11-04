@@ -1,5 +1,5 @@
 import "./AppWindow.css"
-import Button from "../Button/Button.tsx"
+import Button from "@/components/Button/Button.tsx"
 import type {ReactNode} from "react"
 
 export type MenuData = {

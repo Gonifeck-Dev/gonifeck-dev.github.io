@@ -1,5 +1,5 @@
-import type {Meta, StoryObj} from "@storybook/react-vite";
-import AppWindow from "./AppWindow.tsx";
+import type {Meta, StoryObj} from "@storybook/react-vite"
+import AppWindow from "./AppWindow.tsx"
 
 const meta = {
     title: "Escritorio/Ventana",
@@ -17,10 +17,10 @@ const meta = {
         field: {description: "Campo: contenido sobre fondo oscuro con bisel hundido"},
         children: {control: false, description: "Contenido de la app"},
     },
-} satisfies Meta<typeof AppWindow>;
+} satisfies Meta<typeof AppWindow>
 
-export default meta;
-type Story = StoryObj<typeof meta>;
+export default meta
+type Story = StoryObj<typeof meta>
 
 // Todas las partes: título, menús, contenido y barra de estado
 export const Completa: Story = {
@@ -34,11 +34,11 @@ export const Completa: Story = {
         status: {text: "Listo", easterEggs: "Secretos: 0/5"},
         field: true,
     },
-};
+}
 
 // Como un visor de fotos: solo barra de título y contenido
 export const SinMenuNiEstado: Story = {
     name: "Sin menú ni estado",
     args: {title: "foto.png"},
-};
+}
 

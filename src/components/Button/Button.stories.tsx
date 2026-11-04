@@ -1,6 +1,6 @@
-import type {Meta, StoryObj} from "@storybook/react-vite";
-import {fn} from "storybook/test";
-import Button from "./Button.tsx";
+import type {Meta, StoryObj} from "@storybook/react-vite"
+import {fn} from "storybook/test"
+import Button from "./Button.tsx"
 
 const meta = {
     title: "Escritorio/Botón",
@@ -22,26 +22,26 @@ const meta = {
         newTab: {description: "Abre el enlace en otra pestaña"},
         download: {description: "Descarga el archivo del enlace"},
     },
-} satisfies Meta<typeof Button>;
+} satisfies Meta<typeof Button>
 
-export default meta;
-type Story = StoryObj<typeof meta>;
+export default meta
+type Story = StoryObj<typeof meta>
 
-export const Normal: Story = {};
+export const Normal: Story = {}
 
 export const Primario: Story = {
     args: {emphasis: "primary", label: "Descargar CV"},
-};
+}
 
 export const Hundido: Story = {
     args: {pressed: true, label: "Símbolo de MS-DOS"},
-};
+}
 
 export const ControlDeVentana: Story = {
     name: "Control de ventana",
     args: {variant: "small", label: "_"},
-};
+}
 
 export const Enlace: Story = {
     args: {label: "Ver Proyectos", href: "https://github.com/Gonifeck-Dev", newTab: true},
-};
+}

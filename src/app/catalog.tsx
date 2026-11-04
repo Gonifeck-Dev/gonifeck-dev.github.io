@@ -1,5 +1,5 @@
-import type {AppData} from "../components/Desktop/Desktop.tsx";
-import AboutMe from "../features/about-me/components/AboutMe.tsx";
+import type {AppData} from "@/features/desktop/types/app.ts"
+import AboutMe from "@/features/about-me/components/AboutMe.tsx"
 
 // Catálogo: las apps del escritorio. Agregar una app = una feature nueva + una entrada aquí.
 // Vive en app/ porque es el único lugar que puede conocer todas las features (bulletproof-react).

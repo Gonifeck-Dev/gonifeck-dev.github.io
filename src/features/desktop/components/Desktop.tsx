@@ -1,23 +1,10 @@
-import {useState} from "react";
-import type {ReactNode} from "react";
-import "./Desktop.css";
-import LightBeam from "../LightBeam/LightBeam.tsx";
-import TaskBar from "../TaskBar/TaskBar.tsx";
-import Button from "../Button/Button.tsx";
-import AppWindow from "../AppWindow/AppWindow.tsx";
-import type {MenuData, StatusData} from "../AppWindow/AppWindow.tsx";
-
-// Contrato: la forma que debe tener cada app que se le entregue al escritorio.
-// El catálogo (src/app/catalog.tsx) lo cumple; Desktop no conoce ninguna feature.
-export type AppData = {
-    id: string
-    title: string
-    menus?: MenuData[]
-    status?: StatusData
-    field?: boolean
-    openAtStart?: boolean
-    content: ReactNode
-}
+import {useState} from "react"
+import "./Desktop.css"
+import LightBeam from "./LightBeam.tsx"
+import Button from "@/components/Button/Button.tsx"
+import AppWindow from "@/components/AppWindow/AppWindow.tsx"
+import TaskBar from "./TaskBar.tsx"
+import type {AppData} from "@/features/desktop/types/app.ts"
 
 type WindowState = {
     id: string
@@ -44,11 +31,16 @@ function Desktop({apps}: DesktopProps) {
         return apps.find(app => app.id === id)
     }
 
+    // Trae la ventana adelante, la desminimiza y la marca activa.
+    // setWindows(prev => …): calcula sobre el estado más reciente, aunque lleguen varios clics seguidos.
+    // Math.max(0, …): si no hubiera ventanas, el resultado sería -Infinity.
     function activate(id: string) {
-        const topZ = Math.max(...windows.map(w => w.z))
-        setWindows(windows.map(w =>
-            w.id === id ? {...w, z: topZ + 1, minimized: false} : w
-        ))
+        setWindows(prev => {
+            const topZ = Math.max(0, ...prev.map(w => w.z))
+            return prev.map(w =>
+                w.id === id ? {...w, z: topZ + 1, minimized: false} : w
+            )
+        })
         setActiveId(id)
     }
 
@@ -86,4 +78,4 @@ function Desktop({apps}: DesktopProps) {
     )
 }
 
-export default Desktop;
+export default Desktop
