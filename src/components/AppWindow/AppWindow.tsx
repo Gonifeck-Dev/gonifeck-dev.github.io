@@ -17,10 +17,11 @@ type AppWindowProps = {
     icon?: string,
     menus?: MenuData[],
     status?: StatusData,
+    field?: boolean,
     children?: ReactNode,
 }
 
-function AppWindow({title, icon, menus, status, children}: AppWindowProps) {
+function AppWindow({title, icon, menus, status, field, children}: AppWindowProps) {
     return (
         <div className="window">
             <div className="window-title-bar">
@@ -49,7 +50,7 @@ function AppWindow({title, icon, menus, status, children}: AppWindowProps) {
                 </ul>
             )}
 
-            <div className="window-content">
+            <div className={field ? "window-content window-content-field" : "window-content"}>
                 {children}
             </div>
 

@@ -52,4 +52,13 @@
     .window-status-item:first-child {
         flex: 1;
     }
+
+    .window-content {
+        padding: 12px;
+    }
+
+    .window-content-field {
+        background: var(--field-bg);
+        box-shadow: var(--bevel-sunken);
+    }
 }

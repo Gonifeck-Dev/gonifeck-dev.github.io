@@ -8,13 +8,14 @@ const meta = {
     tags: ["autodocs"],
     args: {
         title: "Bloc de notas",
-        children: <p style={{padding: 12}}>Contenido de ejemplo dentro de la ventana.</p>,
+        children: <p>Contenido de ejemplo dentro de la ventana.</p>,
     },
     argTypes: {
         title: {description: "Texto de la barra de título"},
         icon: {description: "Ruta de un ícono opcional junto al título"},
         menus: {description: "Menús de la ventana (opcional: una foto no los tiene)"},
         status: {description: "Barra de estado inferior (opcional)"},
+        field: {description: "Campo: contenido sobre fondo oscuro con bisel hundido"},
         children: {control: false, description: "Contenido de la app"},
     },
 } satisfies Meta<typeof AppWindow>;
@@ -32,6 +33,7 @@ export const Completa: Story = {
             {title: "Ayuda", options: []},
         ],
         status: {text: "Listo", easterEggs: "Secretos: 0/5"},
+        field: true,
     },
 };
 
@@ -53,6 +55,7 @@ export const ConSobreMi: Story = {
             {title: "Ayuda", options: []},
         ],
         status: {text: "Listo · Disponible para trabajar", easterEggs: "Secretos: 0/5"},
+        field: true,
         children: <AboutMe/>,
     },
 };

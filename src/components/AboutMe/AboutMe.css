@@ -1,8 +1,5 @@
 @layer components {
     .aboutme{
-        background: var(--field-bg);
-        box-shadow: var(--bevel-sunken);
-        padding: 12px;
         display: flex;
         flex-direction: column;
         gap: 6px;

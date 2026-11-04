@@ -13,6 +13,7 @@ type AppData = {
     title: string
     menus?: MenuData[]
     status?: StatusData
+    field?: boolean
     content: ReactNode
 }
 
@@ -34,6 +35,7 @@ const apps: AppData[] = [
             {title: "Ayuda", options: []},
         ],
         status: {text: "Listo · Disponible para trabajar", easterEggs: "Secretos: 0/5"},
+        field: true,
         content: <AboutMe/>,
     },
 ]
@@ -67,7 +69,7 @@ function Desktop() {
                                  e.stopPropagation()
                                  activate(w.id)
                              }}>
-                            <AppWindow title={app.title} menus={app.menus} status={app.status}>
+                            <AppWindow title={app.title} menus={app.menus} status={app.status} field={app.field}>
                                 {app.content}
                             </AppWindow>
                         </div>
