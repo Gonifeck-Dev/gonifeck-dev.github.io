@@ -4,11 +4,15 @@ import "./Desktop.css";
 import LightBeam from "./LightBeam.tsx";
 import TaskBar from "./TaskBar.tsx";
 import Button from "./Button.tsx";
+import AppWindow from "./AppWindow.tsx";
+import type {MenuData, StatusData} from "./AppWindow.tsx";
 import AboutMe from "./AboutMe.tsx";
 
 type AppData = {
     id: string
     title: string
+    menus?: MenuData[]
+    status?: StatusData
     content: ReactNode
 }
 
@@ -18,19 +22,28 @@ type WindowState = {
     minimized: boolean
 }
 
-// Catálogo: lo fijo de cada app. Agregar una app = agregar una línea.
+
 const apps: AppData[] = [
-    {id: "about", title: "Símbolo de MS-DOS", content: <AboutMe/>},
+    {
+        id: "about",
+        title: "Símbolo de MS-DOS",
+        menus: [
+            {title: "Archivo", options: []},
+            {title: "Editar", options: []},
+            {title: "Ver", options: []},
+            {title: "Ayuda", options: []},
+        ],
+        status: {text: "Listo · Disponible para trabajar", easterEggs: "Secretos: 0/5"},
+        content: <AboutMe/>,
+    },
 ]
 
 function Desktop() {
-    // Lo que cambia: ventanas abiertas, su orden (z) y si están minimizadas
     const [windows, setWindows] = useState<WindowState[]>([
         {id: "about", z: 1, minimized: false},
     ])
     const [activeId, setActiveId] = useState<string | null>("about")
 
-    // Trae la ventana adelante, la desminimiza y la marca activa
     function activate(id: string) {
         const topZ = Math.max(...windows.map(w => w.z))
         setWindows(windows.map(w =>
@@ -40,21 +53,26 @@ function Desktop() {
     }
 
     return (
-        // Clic en el escritorio vacío: ninguna ventana activa
         <div className="desktop" onPointerDown={() => setActiveId(null)}>
             <div className="desktop-wall" aria-hidden="true"/>
             <LightBeam/>
             <div className="desktop-windows">
-                {windows.map(w => (
-                    <div key={w.id} className="desktop-window-slot" style={{zIndex: w.z}}
-                         hidden={w.minimized}
-                         onPointerDown={e => {
-                             e.stopPropagation()
-                             activate(w.id)
-                         }}>
-                        {apps.find(app => app.id === w.id)?.content}
-                    </div>
-                ))}
+                {windows.map(w => {
+                    const app = apps.find(a => a.id === w.id)
+                    if (!app) return null
+                    return (
+                        <div key={w.id} className="desktop-window-slot" style={{zIndex: w.z}}
+                             hidden={w.minimized}
+                             onPointerDown={e => {
+                                 e.stopPropagation()
+                                 activate(w.id)
+                             }}>
+                            <AppWindow title={app.title} menus={app.menus} status={app.status}>
+                                {app.content}
+                            </AppWindow>
+                        </div>
+                    )
+                })}
             </div>
             <TaskBar>
                 {windows.map(w => (

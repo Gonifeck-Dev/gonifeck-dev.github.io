@@ -1,18 +1,5 @@
 import "./AboutMe.css"
 import Button from "./Button"
-import AppWindow from "./AppWindow"
-
-const aboutMeMenus = [
-    { title: "Archivo", options: [] },
-    { title: "Editar", options: [] },
-    { title: "Ver", options: [] },
-    { title: "Ayuda", options: [] },
-]
-
-const aboutMeStatus = {
-    text: "Listo · Disponible para trabajar",
-    easterEggs: "Secretos: 0/5",
-}
 
 const aboutMeInfo = {
     command: "C:\\> whoami.bat",
@@ -24,23 +11,21 @@ const aboutMeInfo = {
 
 function AboutMe() {
     return (
-        <AppWindow title="Símbolo de MS-DOS" menus={aboutMeMenus} status={aboutMeStatus}>
-            <div className="aboutme">
-                <p className="aboutme-command">{aboutMeInfo.command}</p>
-                <h1 className="aboutme-name">{aboutMeInfo.name}</h1>
-                <p className="aboutme-subtitle">{aboutMeInfo.subtitle}</p>
-                <h2 className="aboutme-role">{aboutMeInfo.role}</h2>
-                <p className="aboutme-text">{aboutMeInfo.text}</p>
-                <div className="aboutme-buttons">
-                    <Button variant="normal" emphasis="primary" label="Descargar CV"
-                            href="/main_fullstack_es.pdf" download/>
-                    <Button variant="normal" label="Ver Proyectos"
-                            href="https://github.com/Gonifeck-Dev" newTab/>
-                    <Button variant="normal" label="Contacto"
-                            href="mailto:gonzalo.fclopez@gmail.com"/>
-                </div>
+        <div className="aboutme">
+            <p className="aboutme-command">{aboutMeInfo.command}</p>
+            <h1 className="aboutme-name">{aboutMeInfo.name}</h1>
+            <p className="aboutme-subtitle">{aboutMeInfo.subtitle}</p>
+            <h2 className="aboutme-role">{aboutMeInfo.role}</h2>
+            <p className="aboutme-text">{aboutMeInfo.text}</p>
+            <div className="aboutme-buttons">
+                <Button variant="normal" emphasis="primary" label="Descargar CV"
+                        href="/main_fullstack_es.pdf" download/>
+                <Button variant="normal" label="Ver Proyectos"
+                        href="https://github.com/Gonifeck-Dev" newTab/>
+                <Button variant="normal" label="Contacto"
+                        href="mailto:gonzalo.fclopez@gmail.com"/>
             </div>
-        </AppWindow>
+        </div>
     )
 }
 

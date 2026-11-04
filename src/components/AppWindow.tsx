@@ -2,12 +2,12 @@ import "./AppWindow.css"
 import Button from "./Button"
 import type { ReactNode } from "react"
 
-type MenuData = {
+export type MenuData = {
     title: string,
     options: string[],
 }
 
-type StatusData = {
+export type StatusData = {
     text: string,
     easterEggs: string,
 }
