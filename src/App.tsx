@@ -1,5 +1,5 @@
-import Desktop from "./components/Desktop.tsx";
-import Monitor from "./components/Monitor.tsx";
+import Desktop from "./components/Desktop/Desktop.tsx";
+import Monitor from "./components/Monitor/Monitor.tsx";
 
 function App() {
     return (

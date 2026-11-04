@@ -1,6 +1,6 @@
 import "./AppWindow.css"
-import Button from "./Button"
-import type { ReactNode } from "react"
+import Button from "../Button/Button.tsx"
+import type {ReactNode} from "react"
 
 export type MenuData = {
     title: string,
@@ -20,19 +20,22 @@ type AppWindowProps = {
     children?: ReactNode,
 }
 
-function AppWindow({ title, icon, menus, status, children }: AppWindowProps) {
+function AppWindow({title, icon, menus, status, children}: AppWindowProps) {
     return (
         <div className="window">
             <div className="window-title-bar">
-                {icon && <img src={icon} alt="" />}
+                {icon && <img src={icon} alt=""/>}
                 <span className="window-title">
                     {title}
                 </span>
 
                 <div className="window-controls">
-                    <Button variant="small" action={() => {}} label="_"/>
-                    <Button variant="small" action={() => {}} label="□"/>
-                    <Button variant="small" action={() => {}} label="X"/>
+                    <Button variant="small" action={() => {
+                    }} label="_"/>
+                    <Button variant="small" action={() => {
+                    }} label="□"/>
+                    <Button variant="small" action={() => {
+                    }} label="X"/>
                 </div>
             </div>
 

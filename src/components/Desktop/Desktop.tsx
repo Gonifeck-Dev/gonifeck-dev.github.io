@@ -1,12 +1,12 @@
 import {useState} from "react";
 import type {ReactNode} from "react";
 import "./Desktop.css";
-import LightBeam from "./LightBeam.tsx";
-import TaskBar from "./TaskBar.tsx";
-import Button from "./Button.tsx";
-import AppWindow from "./AppWindow.tsx";
-import type {MenuData, StatusData} from "./AppWindow.tsx";
-import AboutMe from "./AboutMe.tsx";
+import LightBeam from "../LightBeam/LightBeam.tsx";
+import TaskBar from "../TaskBar/TaskBar.tsx";
+import Button from "../Button/Button.tsx";
+import AppWindow from "../AppWindow/AppWindow.tsx";
+import type {MenuData, StatusData} from "../AppWindow/AppWindow.tsx";
+import AboutMe from "../AboutMe/AboutMe.tsx";
 
 type AppData = {
     id: string
