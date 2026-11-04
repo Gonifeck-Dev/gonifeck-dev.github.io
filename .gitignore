@@ -30,3 +30,6 @@ dist-ssr
 CLAUDE.md
 .env
 .backstage
+
+*storybook.log
+storybook-static
