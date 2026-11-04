@@ -15,12 +15,18 @@
         var(--desktop-bg-end));
     }
 
+    /* Capa de ventanas: ocupa todo el escritorio y es el área donde se mueven (react-rnd las posiciona dentro).
+       isolation: el z-index de las ventanas compite solo entre ellas */
     .desktop-windows {
+        position: absolute;
+        inset: 0;
         isolation: isolate;
     }
 
-    .desktop-window-slot {
-        position: relative;
+    /* Marco invisible de cada ventana: react-rnd lo usa como límite al arrastrar (Desktop lo dimensiona) */
+    .desktop-window-bounds {
+        position: absolute;
+        visibility: hidden;
         pointer-events: none;
     }
 }

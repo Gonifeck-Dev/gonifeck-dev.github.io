@@ -1,14 +1,15 @@
-import type {ReactNode} from "react"
+import type {ReactNode, Ref} from "react"
 import "./TaskBar.css"
 import Button from "@/components/Button/Button.tsx"
 
 type TaskBarProps = {
     children?: ReactNode
+    ref?: Ref<HTMLDivElement> // React 19: ref llega como una prop más (Desktop mide dónde empieza la barra)
 }
 
-function TaskBar({children}: TaskBarProps) {
+function TaskBar({children, ref}: TaskBarProps) {
     return (
-        <div className="taskbar">
+        <div className="taskbar" ref={ref}>
             <div className="taskbar-start">
                 <Button variant="normal" label="Inicio" action={() => {
                 }}/>
