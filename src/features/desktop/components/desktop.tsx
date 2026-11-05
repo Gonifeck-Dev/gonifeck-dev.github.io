@@ -19,7 +19,7 @@ type DesktopProps = {
  * El estado vive en useWindows y la medición del DOM en useWindowPlacement.
  */
 function Desktop({apps}: DesktopProps) {
-    const {windows, activeId, activate, deactivate, setPosition, placeNew, keepInside} = useWindows(apps)
+    const {windows, activeId, activate, deactivate, close, setPosition, placeNew, keepInside} = useWindows(apps)
     const {layerRef, taskBarRef, windowRef, boundsRef, startDrag, drag} =
         useWindowPlacement(windows, {setPosition, placeNew, keepInside})
 
@@ -57,8 +57,8 @@ function Desktop({apps}: DesktopProps) {
                                          event.stopPropagation()
                                          activate(id)
                                      }}>
-                                    <AppWindow title={app.title} menus={app.menus} status={app.status}
-                                               field={app.field}>
+                                    <AppWindow title={app.title} menus={app.menus} status={app.status} field={app.field}
+                                               onClose={() => close(id)}>
                                         {app.content}
                                     </AppWindow>
                                 </div>

@@ -36,6 +36,12 @@ export function useWindows(apps: AppData[]) {
         setActiveId(null)
     }
 
+    /** Deja el escritorio sin ventana. */
+    function close(id: string) {
+        setWindows(previousWindows => previousWindows.filter(windowState => windowState.id !== id))
+        setActiveId(previousActiveId => previousActiveId === id ? null : previousActiveId)
+    }
+
     function setPosition(id: string, position: WindowPosition) {
         setWindows(previousWindows => previousWindows.map(windowState =>
             windowState.id === id ? {...windowState, position} : windowState
@@ -81,5 +87,5 @@ export function useWindows(apps: AppData[]) {
         })
     }, [])
 
-    return {windows, activeId, activate, deactivate, setPosition, placeNew, keepInside}
+    return {windows, activeId, activate, deactivate, close, setPosition, placeNew, keepInside}
 }
