@@ -20,9 +20,10 @@ type AppWindowProps = {
     field?: boolean,
     children?: ReactNode,
     onClose?: () => void,
+    onMinimize?: () => void,
 }
 
-function AppWindow({title, icon, menus, status, field, children, onClose}: AppWindowProps) {
+function AppWindow({title, icon, menus, status, field, children, onClose, onMinimize}: AppWindowProps) {
     return (
         <div className="window">
             <div className="window-title-bar">
@@ -32,8 +33,7 @@ function AppWindow({title, icon, menus, status, field, children, onClose}: AppWi
                 </span>
 
                 <div className="window-controls">
-                    <Button variant="small" action={() => {
-                    }} label="_"/>
+                    <Button variant="small" action={onMinimize} label="_"/>
                     <Button variant="small" action={() => {
                     }} label="□"/>
                     <Button variant="small" action={onClose} label="X"/>

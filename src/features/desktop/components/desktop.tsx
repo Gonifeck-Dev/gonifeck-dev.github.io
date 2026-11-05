@@ -1,4 +1,4 @@
-import {Fragment} from "react"
+import {Fragment, type PointerEvent} from "react"
 import {Rnd} from "react-rnd"
 import "./desktop.css"
 import LightBeam from "@/features/desktop/components/light-beam.tsx"
@@ -19,7 +19,17 @@ type DesktopProps = {
  * El estado vive en useWindows y la medición del DOM en useWindowPlacement.
  */
 function Desktop({apps}: DesktopProps) {
-    const {windows, activeId, activate, deactivate, close, setPosition, placeNew, keepInside} = useWindows(apps)
+    const {
+        windows,
+        activeId,
+        activate,
+        deactivate,
+        minimize,
+        close,
+        setPosition,
+        placeNew,
+        keepInside
+    } = useWindows(apps)
     const {layerRef, taskBarRef, windowRef, boundsRef, startDrag, drag} =
         useWindowPlacement(windows, {setPosition, placeNew, keepInside})
 
@@ -27,11 +37,15 @@ function Desktop({apps}: DesktopProps) {
         return apps.find(app => app.id === appId)
     }
 
+    function handleBackgroundPointerDown(event: PointerEvent) {
+        if (event.target === event.currentTarget) deactivate()
+    }
+
     return (
-        <div className="desktop" onPointerDown={deactivate}>
+        <div className="desktop">
             <div className="desktop-wall" aria-hidden="true"/>
             <LightBeam/>
-            <div className="desktop-windows" ref={layerRef}>
+            <div className="desktop-windows" onPointerDown={handleBackgroundPointerDown} ref={layerRef}>
                 {windows.map(({id, position, z, minimized}) => {
                     const app = getApp(id)
                     if (!app) return null
@@ -58,7 +72,7 @@ function Desktop({apps}: DesktopProps) {
                                          activate(id)
                                      }}>
                                     <AppWindow title={app.title} menus={app.menus} status={app.status} field={app.field}
-                                               onClose={() => close(id)}>
+                                               onClose={() => close(id)} onMinimize={() => minimize(id)}>
                                         {app.content}
                                     </AppWindow>
                                 </div>
@@ -72,7 +86,7 @@ function Desktop({apps}: DesktopProps) {
                     <Button key={id} variant="normal"
                             label={getApp(id)?.title}
                             pressed={id === activeId}
-                            action={() => activate(id)}/>
+                            action={() => id === activeId ? minimize(id) : activate(id)}/>
                 ))}
             </TaskBar>
         </div>

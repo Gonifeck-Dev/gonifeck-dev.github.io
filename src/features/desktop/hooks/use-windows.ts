@@ -42,6 +42,14 @@ export function useWindows(apps: AppData[]) {
         setActiveId(previousActiveId => previousActiveId === id ? null : previousActiveId)
     }
 
+    /** Oculta la ventana sin cerrarla. Si era la activa, el escritorio queda sin ventana activa. */
+    function minimize(id: string) {
+        setWindows(previousWindows => previousWindows.map(windowState =>
+            windowState.id === id ? {...windowState, minimized: true} : windowState
+        ))
+        setActiveId(previousActiveId => previousActiveId === id ? null : previousActiveId)
+    }
+
     function setPosition(id: string, position: WindowPosition) {
         setWindows(previousWindows => previousWindows.map(windowState =>
             windowState.id === id ? {...windowState, position} : windowState
@@ -87,5 +95,5 @@ export function useWindows(apps: AppData[]) {
         })
     }, [])
 
-    return {windows, activeId, activate, deactivate, close, setPosition, placeNew, keepInside}
+    return {windows, activeId, activate, deactivate, minimize, close, setPosition, placeNew, keepInside}
 }
