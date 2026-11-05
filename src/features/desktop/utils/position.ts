@@ -14,6 +14,24 @@ export const WINDOW_MIN_VISIBLE = 80
 export const NEW_WINDOW_DISPLACEMENT = 24
 
 /**
+ * Límites de la esquina superior izquierda de una ventana, en px.
+ * Es la regla única que usan {@link clampPosition} y el marco del arrastre.
+ *
+ * @param size - Tamaño de la ventana.
+ * @param area - Tamaño del escritorio.
+ * @param minLeft - Píxeles visibles al salir por la izquierda.
+ * @returns `minX`/`maxX` y `minY`/`maxY`: hasta dónde puede ir la esquina en cada eje.
+ */
+export function windowLimits(size: Size, area: Size, minLeft = WINDOW_MIN_VISIBLE) {
+    return {
+        minX: minLeft - size.width,
+        maxX: area.width - WINDOW_MIN_VISIBLE,
+        minY: 0,
+        maxY: area.height - WINDOW_MIN_VISIBLE,
+    }
+}
+
+/**
  * Mantiene una ventana dentro del área, dejando siempre una parte visible.
  *
  * Por arriba no sale nunca, para que la barra de título siempre se pueda agarrar.
@@ -26,11 +44,7 @@ export const NEW_WINDOW_DISPLACEMENT = 24
  * @returns La posición corregida.
  */
 export function clampPosition(position: WindowPosition, size: Size, area: Size, minLeft = WINDOW_MIN_VISIBLE): WindowPosition {
-    const maxX = area.width - WINDOW_MIN_VISIBLE
-    const minX = minLeft - size.width
-
-    const maxY = area.height - WINDOW_MIN_VISIBLE
-    const minY = 0
+    const {minX, maxX, minY, maxY} = windowLimits(size, area, minLeft)
 
     return {
         x: clamp(position.x, minX, maxX),

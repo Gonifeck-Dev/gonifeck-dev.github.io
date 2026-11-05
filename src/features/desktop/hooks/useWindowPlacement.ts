@@ -1,6 +1,6 @@
 import {useEffect, useLayoutEffect, useRef} from "react"
 import type {WindowState} from "@/features/desktop/types/window.ts"
-import {clampPosition, WINDOW_MIN_VISIBLE, nextPosition} from "@/features/desktop/utils/position.ts"
+import {clampPosition, WINDOW_MIN_VISIBLE, nextPosition, windowLimits} from "@/features/desktop/utils/position.ts"
 import type {WindowPosition, Size} from "@/features/desktop/utils/position.ts"
 import {measureArea, measureMinVisibleLeft, measureSize} from "@/features/desktop/utils/measure.ts"
 
@@ -78,17 +78,16 @@ export function useWindowPlacement(windows: WindowState[], {setPosition, placeNe
     }, [keepInside])
 
     // Ajusta el marco invisible de la ventana: la caja donde debe caber entera para cumplir
-    // las reglas de clampPosition. react-rnd lo usa como límite durante el arrastre.
+    // las reglas de clampPosition. React-rnd lo usa como límite durante el arrastre.
     function startDrag(id: string) {
         const boundsBox = boundsRefs.current.get(id)
         if (!boundsBox) return
-        const area = getArea()
         const {width, height} = getSize(id)
-        const boxLeft = getMinLeft(id) - width
-        boundsBox.style.left = `${boxLeft}px`
-        boundsBox.style.top = "0px"
-        boundsBox.style.width = `${area.width - WINDOW_MIN_VISIBLE + width - boxLeft}px`
-        boundsBox.style.height = `${area.height - WINDOW_MIN_VISIBLE + height}px`
+        const {minX, maxX, minY, maxY} = windowLimits({width, height}, getArea(), getMinLeft(id))
+        boundsBox.style.left = `${minX}px`
+        boundsBox.style.top = `${minY}px`
+        boundsBox.style.width = `${maxX + width - minX}px`
+        boundsBox.style.height = `${maxY + height - minY}px`
     }
 
     function drag(id: string, position: WindowPosition) {
