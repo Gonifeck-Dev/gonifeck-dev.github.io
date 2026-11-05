@@ -1,9 +1,5 @@
 import {clamp} from "@/features/desktop/utils/clamp.ts"
-
-/** Coordenadas en px. En una ventana, su esquina superior izquierda. */
-export type WindowPosition = { x: number, y: number }
-/** Ancho y alto en px. */
-export type Size = { width: number, height: number }
+import type {Size, WindowPosition} from "@/features/desktop/types/window.ts"
 
 /**
  * Píxeles de la ventana que siempre quedan dentro del área por la derecha y por abajo.

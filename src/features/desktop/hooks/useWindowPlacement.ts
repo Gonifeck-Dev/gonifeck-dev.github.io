@@ -1,7 +1,6 @@
 import {useEffect, useLayoutEffect, useRef} from "react"
-import type {WindowState} from "@/features/desktop/types/window.ts"
+import type {Size, WindowPosition, WindowState} from "@/features/desktop/types/window.ts"
 import {clampPosition, WINDOW_MIN_VISIBLE, nextPosition, windowLimits} from "@/features/desktop/utils/position.ts"
-import type {WindowPosition, Size} from "@/features/desktop/utils/position.ts"
 import {measureArea, measureMinVisibleLeft, measureSize} from "@/features/desktop/utils/measure.ts"
 
 type WindowActions = {

@@ -1,7 +1,6 @@
 import {useCallback, useState} from "react"
 import type {AppData} from "@/features/desktop/types/app.ts"
-import type {WindowState} from "@/features/desktop/types/window.ts"
-import type {WindowPosition} from "@/features/desktop/utils/position.ts"
+import type {WindowPosition, WindowState} from "@/features/desktop/types/window.ts"
 
 /**
  * Estado de las ventanas abiertas y de cuál está activa. No mide el DOM: las posiciones

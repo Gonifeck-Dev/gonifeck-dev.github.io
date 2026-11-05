@@ -1,4 +1,5 @@
-import {WINDOW_MIN_VISIBLE, type Size} from "@/features/desktop/utils/position.ts"
+import {WINDOW_MIN_VISIBLE} from "@/features/desktop/utils/position.ts"
+import type {Size} from "@/features/desktop/types/window.ts"
 
 /**
  * Mide el área de trabajo: el ancho de la capa y su alto hasta donde empieza la barra de tareas.

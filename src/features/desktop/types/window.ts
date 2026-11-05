@@ -1,4 +1,7 @@
-import type {WindowPosition} from "@/features/desktop/utils/position.ts"
+/** Coordenadas en px. En una ventana, su esquina superior izquierda. */
+export type WindowPosition = { x: number, y: number }
+/** Ancho y alto en px. */
+export type Size = { width: number, height: number }
 
 /** Una ventana abierta en el escritorio. */
 export type WindowState = {
