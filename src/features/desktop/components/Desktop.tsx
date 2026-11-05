@@ -1,8 +1,8 @@
 import {Fragment} from "react"
 import {Rnd} from "react-rnd"
 import "./Desktop.css"
-import LightBeam from "./LightBeam.tsx"
-import TaskBar from "./TaskBar.tsx"
+import LightBeam from "@/features/desktop/components/LightBeam.tsx"
+import TaskBar from "@/features/desktop/components/TaskBar.tsx"
 import Button from "@/components/Button/Button.tsx"
 import AppWindow from "@/components/AppWindow/AppWindow.tsx"
 import type {AppData} from "@/features/desktop/types/app.ts"
@@ -10,11 +10,14 @@ import {useWindows} from "@/features/desktop/hooks/useWindows.ts"
 import {useDesktopLayout} from "@/features/desktop/hooks/useDesktopLayout.ts"
 
 type DesktopProps = {
+    /** Apps que el escritorio puede mostrar como ventanas. */
     apps: AppData[]
 }
 
-// El escritorio: arma la pantalla. El estado vive en useWindows y el DOM (medir,
-// ubicar, límites del arrastre) en useDesktopLayout.
+/**
+ * Escritorio: fondo, ventanas arrastrables y barra de tareas.
+ * El estado vive en useWindows y la medición del DOM en useDesktopLayout.
+ */
 function Desktop({apps}: DesktopProps) {
     const {windows, activeId, activate, deactivate, setPosition, placeNew, keepInside} = useWindows(apps)
     const {layerRef, taskBarRef, windowRef, boundsRef, startDrag, drag} =

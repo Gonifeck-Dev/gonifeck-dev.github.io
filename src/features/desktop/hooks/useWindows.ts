@@ -3,11 +3,14 @@ import type {AppData} from "@/features/desktop/types/app.ts"
 import type {WindowState} from "@/features/desktop/types/window.ts"
 import type {WindowPosition} from "@/features/desktop/utils/position.ts"
 
-// ESTADO de las ventanas: cuáles están abiertas, su orden (z), si están minimizadas,
-// su posición y cuál está activa. No toca el DOM: las posiciones las calcula quien llama
-// (useDesktopLayout) y aquí solo se guardan. Así estas reglas se pueden probar solas.
+/**
+ * Estado de las ventanas abiertas y de cuál está activa. No mide el DOM: las posiciones
+ * llegan calculadas desde useDesktopLayout.
+ *
+ * @param apps - Catálogo de apps. Al cargar se abren las que tienen `openAtStart`, en su orden.
+ * @returns `windows` y `activeId` (null si ninguna está activa), y las acciones para cambiarlos.
+ */
 export function useWindows(apps: AppData[]) {
-    // Al cargar se abren las apps marcadas con openAtStart, en el orden del catálogo
     const [windows, setWindows] = useState<WindowState[]>(() =>
         apps
             .filter(app => app.openAtStart)
@@ -17,11 +20,10 @@ export function useWindows(apps: AppData[]) {
         apps.find(app => app.openAtStart)?.id ?? null
     )
 
-    // Trae la ventana adelante, la desminimiza y la marca activa.
-    // setWindows(previous => …): calcula sobre el estado más reciente, aunque lleguen varios clics seguidos.
-    // Math.max(0, …): si no hubiera ventanas, el resultado sería -Infinity.
+    /** Trae la ventana al frente, la restaura si estaba minimizada y la marca activa. */
     function activate(id: string) {
         setWindows(previousWindows => {
+            // El 0 evita -Infinity cuando no hay ventanas
             const highestZ = Math.max(0, ...previousWindows.map(windowState => windowState.z))
             return previousWindows.map(windowState =>
                 windowState.id === id ? {...windowState, z: highestZ + 1, minimized: false} : windowState
@@ -30,7 +32,7 @@ export function useWindows(apps: AppData[]) {
         setActiveId(id)
     }
 
-    // Clic en el escritorio vacío: ninguna ventana activa
+    /** Deja el escritorio sin ventana activa. */
     function deactivate() {
         setActiveId(null)
     }
@@ -41,11 +43,12 @@ export function useWindows(apps: AppData[]) {
         ))
     }
 
-    // Ubica las ventanas que aún no tienen posición, en orden: cada una recibe la posición
-    // de la anterior como previousPosition (así salen en cascada). calculatePosition decide dónde va.
-    // useCallback: la función es la misma en cada render, así los efectos de useDesktopLayout
-    // que la usan no se vuelven a ejecutar sin necesidad (solo depende de setWindows, que es estable).
+    /**
+     * Ubica las ventanas que aún no tienen posición, en orden de apertura.
+     * Cada una recibe la posición de la anterior, para salir en cascada.
+     */
     const placeNew = useCallback((calculatePosition: (id: string, previousPosition: WindowPosition | null) => WindowPosition) => {
+        // useCallback: useDesktopLayout usa placeNew y keepInside como dependencias de sus efectos
         setWindows(previousWindows => {
             let previousPosition: WindowPosition | null = null
             return previousWindows.map(windowState => {
@@ -60,8 +63,10 @@ export function useWindows(apps: AppData[]) {
         })
     }, [])
 
-    // Recalcula la posición de todas (p. ej. al cambiar el tamaño del área).
-    // Si ninguna cambia, devuelve el mismo estado y React no vuelve a dibujar.
+    /**
+     * Recalcula la posición de todas las ventanas ya ubicadas (p. ej. al cambiar el tamaño del área).
+     * Si ninguna cambia, devuelve el mismo estado para no redibujar.
+     */
     const keepInside = useCallback((calculatePosition: (id: string, position: WindowPosition) => WindowPosition) => {
         setWindows(previousWindows => {
             let anyMoved = false

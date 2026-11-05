@@ -1,5 +1,5 @@
 import type {Meta, StoryObj} from "@storybook/react-vite"
-import TaskBar from "./TaskBar.tsx"
+import TaskBar from "@/features/desktop/components/TaskBar.tsx"
 import Button from "@/components/Button/Button.tsx"
 
 const meta = {
@@ -20,28 +20,28 @@ const meta = {
         ),
     ],
     argTypes: {
-        children: {control: false, description: "Botones de tareas: uno por ventana abierta"},
+        children: {control: false},
     },
 } satisfies Meta<typeof TaskBar>
 
 export default meta
 type Story = StoryObj<typeof meta>
 
-// Solo Inicio, separadores y reloj
-export const SinTareas: Story = {
+/** Solo Inicio, separadores y reloj. */
+export const NoTasks: Story = {
     name: "Sin tareas",
 }
 
-// La tarea de la ventana activa se ve hundida
-export const UnaTareaActiva: Story = {
+/** La tarea de la ventana activa se ve hundida. */
+export const OneActiveTask: Story = {
     name: "Una tarea activa",
     args: {
         children: <Button variant="normal" label="Símbolo de MS-DOS" pressed/>,
     },
 }
 
-// Varias ventanas abiertas: una activa y el resto normales
-export const VariasTareas: Story = {
+/** Varias ventanas abiertas: una activa y el resto normales. */
+export const ManyTasks: Story = {
     name: "Varias tareas",
     args: {
         children: (

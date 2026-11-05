@@ -3,24 +3,29 @@ import type {WindowState} from "@/features/desktop/types/window.ts"
 import {clampPosition, WINDOW_MIN_VISIBLE, nextPosition} from "@/features/desktop/utils/position.ts"
 import type {WindowPosition, Size} from "@/features/desktop/utils/position.ts"
 
-// Lo que este hook necesita de useWindows (solo las acciones que usa)
 type WindowActions = {
     setPosition: (id: string, position: WindowPosition) => void
-    placeNew: (calculate: (id: string, previousPosition: WindowPosition | null) => WindowPosition) => void
-    keepInside: (calculate: (id: string, position: WindowPosition) => WindowPosition) => void
+    placeNew: (calculatePosition: (id: string, previousPosition: WindowPosition | null) => WindowPosition) => void
+    keepInside: (calculatePosition: (id: string, position: WindowPosition) => WindowPosition) => void
 }
 
-// DOM del escritorio: guarda las referencias a los elementos, mide el área y las ventanas,
-// ubica las ventanas nuevas, las empuja al cambiar el tamaño y prepara el marco del arrastre.
-// Las reglas (dónde puede estar una ventana) están en utils/position.ts; aquí solo se mide.
+/**
+ * Conecta el estado de las ventanas con el DOM: mide el área y cada ventana, ubica las
+ * ventanas nuevas, devuelve al área las que quedan fuera y limita el arrastre.
+ * Las reglas de posición están en utils/position.ts.
+ *
+ * @param windows - Ventanas abiertas (de useWindows).
+ * @param actions - `setPosition`, `placeNew` y `keepInside` de useWindows.
+ * @returns Refs para conectar en Desktop (capa, barra de tareas, cada ventana y su marco)
+ *   y los manejadores del arrastre (`startDrag`, `drag`).
+ */
 export function useDesktopLayout(windows: WindowState[], {setPosition, placeNew, keepInside}: WindowActions) {
-    // Referencias al DOM: la capa de ventanas, la barra de tareas, cada ventana y su marco invisible
     const layerRef = useRef<HTMLDivElement>(null)
     const taskBarRef = useRef<HTMLDivElement>(null)
     const windowRefs = useRef(new Map<string, HTMLDivElement>())
     const boundsRefs = useRef(new Map<string, HTMLDivElement>())
 
-    // Área de trabajo: la capa de ventanas, desde arriba hasta donde empieza la barra de tareas
+    // Área de trabajo: la capa de ventanas sin la barra de tareas
     function getArea(): Size {
         const layerRect = layerRef.current?.getBoundingClientRect()
         const taskBarRect = taskBarRef.current?.getBoundingClientRect()
@@ -34,13 +39,13 @@ export function useDesktopLayout(windows: WindowState[], {setPosition, placeNew,
         return {width: windowNode?.offsetWidth ?? 0, height: windowNode?.offsetHeight ?? 0}
     }
 
-    // Mínimo visible por la izquierda: los botones _ □ X completos + una base para agarrar
+    // Píxeles visibles por la izquierda: los botones _ □ X más WINDOW_MIN_VISIBLE
     function getMinLeft(id: string): number {
         const controls = windowRefs.current.get(id)?.querySelector<HTMLElement>(".window-controls")
         return (controls?.offsetWidth ?? 0) + WINDOW_MIN_VISIBLE
     }
 
-    // Callback refs: React llama con el elemento al aparecer y con null al desaparecer
+    // Refs por id: guardan el nodo al montarse y lo borran al desmontarse
     function windowRef(id: string) {
         return (node: HTMLDivElement | null) => {
             if (node) windowRefs.current.set(id, node)
@@ -56,19 +61,15 @@ export function useDesktopLayout(windows: WindowState[], {setPosition, placeNew,
     }
 
     // Ubica las ventanas nuevas después de dibujarlas (recién ahí se conoce su tamaño)
-    // y antes de que el navegador pinte, así no se ven saltar.
-    // Medir el DOM y luego actualizar el estado es el uso documentado de useLayoutEffect
-    // (react.dev → useLayoutEffect → "Measuring layout before the browser repaints the screen").
+    // y antes de que el navegador pinte, para que no se vean saltar
     useLayoutEffect(() => {
-        const allWindowsPlaced = windows.every(w => w.position !== null)
+        const allWindowsPlaced = windows.every(windowState => windowState.position !== null)
         if (allWindowsPlaced) return
         const area = getArea()
         placeNew((id, previousPosition) => nextPosition(previousPosition, getSize(id), area, getMinLeft(id)))
     }, [windows, placeNew])
 
-    // Si cambia el tamaño del área (navegador, marco del CRT, barra de tareas), las ventanas que
-    // quedaron fuera del marco se empujan hacia adentro. Las que ya estaban dentro no se mueven.
-    // ResizeObserver avisa como mucho una vez por cuadro y solo cuando el tamaño cambia de verdad.
+    // Si la capa de ventanas cambia de tamaño, devuelve al área las ventanas que quedaron fuera
     useEffect(() => {
         const layer = layerRef.current
         if (!layer) return
@@ -77,13 +78,11 @@ export function useDesktopLayout(windows: WindowState[], {setPosition, placeNew,
             keepInside((id, position) => clampPosition(position, getSize(id), area, getMinLeft(id)))
         })
         observer.observe(layer)
-        return () => observer.disconnect() // al desmontar el escritorio se deja de observar
+        return () => observer.disconnect()
     }, [keepInside])
 
-    // Al empezar a arrastrar se dimensiona el marco invisible de esa ventana: es la caja donde
-    // la ventana entera debe caber para cumplir la regla (izquierda: _ □ X + base; arriba: 0;
-    // derecha y abajo: WINDOW_MIN_VISIBLE). react-rnd lo mide justo después y limita el arrastre por
-    // su cuenta, eje por eje y sin saltos: al volver de un borde, la ventana espera al puntero.
+    // Ajusta el marco invisible de la ventana: la caja donde debe caber entera para cumplir
+    // las reglas de clampPosition. react-rnd lo usa como límite durante el arrastre.
     function startDrag(id: string) {
         const boundsBox = boundsRefs.current.get(id)
         if (!boundsBox) return
@@ -96,7 +95,7 @@ export function useDesktopLayout(windows: WindowState[], {setPosition, placeNew,
         boundsBox.style.height = `${area.height - WINDOW_MIN_VISIBLE + height}px`
     }
 
-    // Guarda la posición; clampPosition es una red de seguridad (react-rnd ya respeta el marco)
+    // clampPosition es una red de seguridad: react-rnd ya respeta el marco
     function drag(id: string, position: WindowPosition) {
         setPosition(id, clampPosition(position, getSize(id), getArea(), getMinLeft(id)))
     }

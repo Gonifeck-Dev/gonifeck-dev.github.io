@@ -3,10 +3,13 @@ import "./TaskBar.css"
 import Button from "@/components/Button/Button.tsx"
 
 type TaskBarProps = {
+    /** Botones de tarea: uno por ventana abierta. */
     children?: ReactNode
-    ref?: Ref<HTMLDivElement> // React 19: ref llega como una prop más (Desktop mide dónde empieza la barra)
+    /** El escritorio lo mide para saber dónde termina el área de trabajo. */
+    ref?: Ref<HTMLDivElement>
 }
 
+/** Barra de tareas: botón Inicio, tareas y reloj. */
 function TaskBar({children, ref}: TaskBarProps) {
     return (
         <div className="taskbar" ref={ref}>
