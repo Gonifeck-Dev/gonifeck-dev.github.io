@@ -11,8 +11,7 @@ function TaskBar({children, ref}: TaskBarProps) {
     return (
         <div className="taskbar" ref={ref}>
             <div className="taskbar-start">
-                <Button variant="normal" label="Inicio" action={() => {
-                }}/>
+                <Button variant="normal" label="Inicio" action={() => {}}/>
             </div>
             <div className="taskbar-separator" aria-hidden="true"/>
             <div className="taskbar-task">{children}</div>

@@ -6,7 +6,7 @@ import type {WindowPosition, Size} from "@/features/desktop/utils/position.ts"
 // Lo que este hook necesita de useWindows (solo las acciones que usa)
 type WindowActions = {
     setPosition: (id: string, position: WindowPosition) => void
-    placeNew: (calculate: (id: string, focused: WindowPosition | null) => WindowPosition) => void
+    placeNew: (calculate: (id: string, previousPosition: WindowPosition | null) => WindowPosition) => void
     keepInside: (calculate: (id: string, position: WindowPosition) => WindowPosition) => void
 }
 
@@ -22,15 +22,16 @@ export function useDesktopLayout(windows: WindowState[], {setPosition, placeNew,
 
     // Área de trabajo: la capa de ventanas, desde arriba hasta donde empieza la barra de tareas
     function getArea(): Size {
-        const layer = layerRef.current?.getBoundingClientRect()
-        const taskBar = taskBarRef.current?.getBoundingClientRect()
-        if (!layer) return {width: 0, height: 0}
-        return {width: layer.width, height: (taskBar?.top ?? layer.bottom) - layer.top}
+        const layerRect = layerRef.current?.getBoundingClientRect()
+        const taskBarRect = taskBarRef.current?.getBoundingClientRect()
+        if (!layerRect) return {width: 0, height: 0}
+        const areaBottom = taskBarRect?.top ?? layerRect.bottom
+        return {width: layerRect.width, height: areaBottom - layerRect.top}
     }
 
     function getSize(id: string): Size {
-        const node = windowRefs.current.get(id)
-        return {width: node?.offsetWidth ?? 0, height: node?.offsetHeight ?? 0}
+        const windowNode = windowRefs.current.get(id)
+        return {width: windowNode?.offsetWidth ?? 0, height: windowNode?.offsetHeight ?? 0}
     }
 
     // Mínimo visible por la izquierda: los botones _ □ X completos + una base para agarrar
@@ -59,9 +60,10 @@ export function useDesktopLayout(windows: WindowState[], {setPosition, placeNew,
     // Medir el DOM y luego actualizar el estado es el uso documentado de useLayoutEffect
     // (react.dev → useLayoutEffect → "Measuring layout before the browser repaints the screen").
     useLayoutEffect(() => {
-        if (windows.every(w => w.position !== null)) return
+        const allWindowsPlaced = windows.every(w => w.position !== null)
+        if (allWindowsPlaced) return
         const area = getArea()
-        placeNew((id, focused) => nextPosition(focused, getSize(id), area, getMinLeft(id)))
+        placeNew((id, previousPosition) => nextPosition(previousPosition, getSize(id), area, getMinLeft(id)))
     }, [windows, placeNew])
 
     // Si cambia el tamaño del área (navegador, marco del CRT, barra de tareas), las ventanas que
@@ -83,15 +85,15 @@ export function useDesktopLayout(windows: WindowState[], {setPosition, placeNew,
     // derecha y abajo: WINDOW_MIN_VISIBLE). react-rnd lo mide justo después y limita el arrastre por
     // su cuenta, eje por eje y sin saltos: al volver de un borde, la ventana espera al puntero.
     function startDrag(id: string) {
-        const box = boundsRefs.current.get(id)
-        if (!box) return
+        const boundsBox = boundsRefs.current.get(id)
+        if (!boundsBox) return
         const area = getArea()
-        const size = getSize(id)
-        const left = getMinLeft(id) - size.width
-        box.style.left = `${left}px`
-        box.style.top = "0px"
-        box.style.width = `${area.width - WINDOW_MIN_VISIBLE + size.width - left}px`
-        box.style.height = `${area.height - WINDOW_MIN_VISIBLE + size.height}px`
+        const {width, height} = getSize(id)
+        const boxLeft = getMinLeft(id) - width
+        boundsBox.style.left = `${boxLeft}px`
+        boundsBox.style.top = "0px"
+        boundsBox.style.width = `${area.width - WINDOW_MIN_VISIBLE + width - boxLeft}px`
+        boundsBox.style.height = `${area.height - WINDOW_MIN_VISIBLE + height}px`
     }
 
     // Guarda la posición; clampPosition es una red de seguridad (react-rnd ya respeta el marco)

@@ -11,20 +11,20 @@ export function useWindows(apps: AppData[]) {
     const [windows, setWindows] = useState<WindowState[]>(() =>
         apps
             .filter(app => app.openAtStart)
-            .map((app, i) => ({id: app.id, z: i + 1, minimized: false, position: null}))
+            .map((app, index) => ({id: app.id, z: index + 1, minimized: false, position: null}))
     )
     const [activeId, setActiveId] = useState<string | null>(() =>
         apps.find(app => app.openAtStart)?.id ?? null
     )
 
     // Trae la ventana adelante, la desminimiza y la marca activa.
-    // setWindows(prev => …): calcula sobre el estado más reciente, aunque lleguen varios clics seguidos.
+    // setWindows(previous => …): calcula sobre el estado más reciente, aunque lleguen varios clics seguidos.
     // Math.max(0, …): si no hubiera ventanas, el resultado sería -Infinity.
     function activate(id: string) {
-        setWindows(prev => {
-            const topZ = Math.max(0, ...prev.map(w => w.z))
-            return prev.map(w =>
-                w.id === id ? {...w, z: topZ + 1, minimized: false} : w
+        setWindows(previousWindows => {
+            const highestZ = Math.max(0, ...previousWindows.map(windowState => windowState.z))
+            return previousWindows.map(windowState =>
+                windowState.id === id ? {...windowState, z: highestZ + 1, minimized: false} : windowState
             )
         })
         setActiveId(id)
@@ -36,41 +36,44 @@ export function useWindows(apps: AppData[]) {
     }
 
     function setPosition(id: string, position: WindowPosition) {
-        setWindows(prev => prev.map(w => w.id === id ? {...w, position} : w))
+        setWindows(previousWindows => previousWindows.map(windowState =>
+            windowState.id === id ? {...windowState, position} : windowState
+        ))
     }
 
     // Ubica las ventanas que aún no tienen posición, en orden: cada una recibe la posición
-    // de la anterior como "en foco" (así salen en cascada). calculate decide dónde va.
+    // de la anterior como previousPosition (así salen en cascada). calculatePosition decide dónde va.
     // useCallback: la función es la misma en cada render, así los efectos de useDesktopLayout
     // que la usan no se vuelven a ejecutar sin necesidad (solo depende de setWindows, que es estable).
-    const placeNew = useCallback((calculate: (id: string, focused: WindowPosition | null) => WindowPosition) => {
-        setWindows(prev => {
-            let focused: WindowPosition | null = null
-            return prev.map(w => {
-                if (w.position) {
-                    focused = w.position
-                    return w
+    const placeNew = useCallback((calculatePosition: (id: string, previousPosition: WindowPosition | null) => WindowPosition) => {
+        setWindows(previousWindows => {
+            let previousPosition: WindowPosition | null = null
+            return previousWindows.map(windowState => {
+                if (windowState.position) {
+                    previousPosition = windowState.position
+                    return windowState
                 }
-                const position = calculate(w.id, focused)
-                focused = position
-                return {...w, position}
+                const position = calculatePosition(windowState.id, previousPosition)
+                previousPosition = position
+                return {...windowState, position}
             })
         })
     }, [])
 
     // Recalcula la posición de todas (p. ej. al cambiar el tamaño del área).
     // Si ninguna cambia, devuelve el mismo estado y React no vuelve a dibujar.
-    const keepInside = useCallback((calculate: (id: string, position: WindowPosition) => WindowPosition) => {
-        setWindows(prev => {
-            let moved = false
-            const next = prev.map(w => {
-                if (!w.position) return w
-                const position = calculate(w.id, w.position)
-                if (position.x === w.position.x && position.y === w.position.y) return w
-                moved = true
-                return {...w, position}
+    const keepInside = useCallback((calculatePosition: (id: string, position: WindowPosition) => WindowPosition) => {
+        setWindows(previousWindows => {
+            let anyMoved = false
+            const updatedWindows = previousWindows.map(windowState => {
+                if (!windowState.position) return windowState
+                const newPosition = calculatePosition(windowState.id, windowState.position)
+                const isSamePosition = newPosition.x === windowState.position.x && newPosition.y === windowState.position.y
+                if (isSamePosition) return windowState
+                anyMoved = true
+                return {...windowState, position: newPosition}
             })
-            return moved ? next : prev
+            return anyMoved ? updatedWindows : previousWindows
         })
     }, [])
 

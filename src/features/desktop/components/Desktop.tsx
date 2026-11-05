@@ -20,8 +20,8 @@ function Desktop({apps}: DesktopProps) {
     const {layerRef, taskBarRef, windowRef, boundsRef, startDrag, drag} =
         useDesktopLayout(windows, {setPosition, placeNew, keepInside})
 
-    function getApp(id: string) {
-        return apps.find(app => app.id === id)
+    function getApp(appId: string) {
+        return apps.find(app => app.id === appId)
     }
 
     return (
@@ -29,29 +29,30 @@ function Desktop({apps}: DesktopProps) {
             <div className="desktop-wall" aria-hidden="true"/>
             <LightBeam/>
             <div className="desktop-windows" ref={layerRef}>
-                {windows.map(w => {
-                    const app = getApp(w.id)
+                {windows.map(({id, position, z, minimized}) => {
+                    const app = getApp(id)
                     if (!app) return null
+                    const boundsId = `bounds-${id}`
                     return (
-                        <Fragment key={w.id}>
-                            <div className="desktop-window-bounds" id={`bounds-${w.id}`} aria-hidden="true"
-                                 ref={boundsRef(w.id)}/>
-                            <Rnd position={w.position ?? {x: 0, y: 0}}
-                                 bounds={`#bounds-${w.id}`}
-                                 onDragStart={() => startDrag(w.id)}
-                                 onDrag={(_e, d) => drag(w.id, {x: d.x, y: d.y})}
+                        <Fragment key={id}>
+                            <div className="desktop-window-bounds" id={boundsId} aria-hidden="true"
+                                 ref={boundsRef(id)}/>
+                            <Rnd position={position ?? {x: 0, y: 0}}
+                                 bounds={`#${boundsId}`}
+                                 onDragStart={() => startDrag(id)}
+                                 onDrag={(_event, dragData) => drag(id, {x: dragData.x, y: dragData.y})}
                                  dragHandleClassName="window-title-bar"
                                  cancel=".window-controls"
                                  enableResizing={false}
                                  style={{
-                                     zIndex: w.z,
-                                     display: w.minimized ? "none" : undefined,
-                                     visibility: w.position ? undefined : "hidden",
+                                     zIndex: z,
+                                     display: minimized ? "none" : undefined,
+                                     visibility: position ? undefined : "hidden",
                                  }}>
-                                <div ref={windowRef(w.id)}
-                                     onPointerDown={e => {
-                                         e.stopPropagation()
-                                         activate(w.id)
+                                <div ref={windowRef(id)}
+                                     onPointerDown={event => {
+                                         event.stopPropagation()
+                                         activate(id)
                                      }}>
                                     <AppWindow title={app.title} menus={app.menus} status={app.status}
                                                field={app.field}>
@@ -64,11 +65,11 @@ function Desktop({apps}: DesktopProps) {
                 })}
             </div>
             <TaskBar ref={taskBarRef}>
-                {windows.map(w => (
-                    <Button key={w.id} variant="normal"
-                            label={getApp(w.id)?.title}
-                            pressed={w.id === activeId}
-                            action={() => activate(w.id)}/>
+                {windows.map(({id}) => (
+                    <Button key={id} variant="normal"
+                            label={getApp(id)?.title}
+                            pressed={id === activeId}
+                            action={() => activate(id)}/>
                 ))}
             </TaskBar>
         </div>
