@@ -1,32 +1,56 @@
-// Cálculos de posición de las ventanas. Funciones puras: no usan React ni el DOM,
-// así se pueden probar solas (Vitest) y la regla del marco vive en un solo lugar.
+import {clamp} from "@/features/desktop/utils/clamp.ts"
 
-export type Point = {x: number, y: number}
-export type Size = {width: number, height: number}
+/** Coordenadas en px. En una ventana, su esquina superior izquierda. */
+export type WindowPosition = { x: number, y: number }
+/** Ancho y alto en px. */
+export type Size = { width: number, height: number }
 
-// Cuánto de la ventana debe quedar siempre dentro del área (por los lados y abajo)
-export const MIN_VISIBLE = 80
-// Desplazamiento de la cascada: cada ventana nueva aparece un poco más abajo y a la derecha
-export const CASCADE_STEP = 24
+/** Píxeles de la ventana que siempre quedan dentro del área, por los lados y abajo. */
+export const WINDOW_MIN_VISIBLE = 80
+/** Píxeles que se desplaza cada ventana nueva respecto de la que está en foco. */
+export const NEW_WINDOW_DISPLACEMENT = 24
 
-// Marco invisible: la ventana puede salir casi entera por los lados y por abajo,
-// pero quedan MIN_VISIBLE px dentro. Por arriba, la barra de título nunca cruza el borde
-// (si no, ya no se podría agarrar para traerla de vuelta).
-// minLeft: lo que queda visible al salir por la izquierda. Desktop pasa el ancho de _ □ X + MIN_VISIBLE,
-// porque por ese lado lo que se ve es la parte derecha de la ventana, donde están los botones.
-// Cada eje se limita por separado: si X topa el borde, Y sigue libre (y al revés).
-export function clampPosition(position: Point, size: Size, area: Size, minLeft = MIN_VISIBLE): Point {
+/**
+ * Mantiene una ventana dentro del área, dejando siempre una parte visible.
+ *
+ * Por arriba no sale nunca, para que la barra de título siempre se pueda agarrar.
+ * Por los lados y abajo puede salir hasta dejar {@link WINDOW_MIN_VISIBLE} px dentro.
+ *
+ * @param position - Posición que se quiere dar a la ventana (esquina superior izquierda).
+ * @param size - Tamaño de la ventana.
+ * @param area - Tamaño del escritorio.
+ * @param minLeft - Píxeles visibles al salir por la izquierda.
+ * @returns La posición corregida.
+ */
+export function clampPosition(position: WindowPosition, size: Size, area: Size, minLeft = WINDOW_MIN_VISIBLE): WindowPosition {
+    const maxX = area.width - WINDOW_MIN_VISIBLE
+    const minX = minLeft - size.width
+
+    const maxY = area.height - WINDOW_MIN_VISIBLE
+    const minY = 0
+
     return {
-        x: Math.min(Math.max(position.x, minLeft - size.width), area.width - MIN_VISIBLE),
-        y: Math.min(Math.max(position.y, 0), area.height - MIN_VISIBLE),
+        x: clamp(position.x, minX, maxX),
+        y: clamp(position.y, minY, maxY),
     }
 }
 
-// Dónde aparece una ventana al crearse: en cascada desde la ventana en foco,
-// o centrada (a un cuarto de la altura) si no hay ninguna en foco.
-export function nextPosition(focused: Point | null, size: Size, area: Size, minLeft = MIN_VISIBLE): Point {
-    const position = focused
-        ? {x: focused.x + CASCADE_STEP, y: focused.y + CASCADE_STEP}
-        : {x: (area.width - size.width) / 2, y: area.height / 4}
-    return clampPosition({x: Math.round(position.x), y: Math.round(position.y)}, size, area, minLeft)
+/**
+ * Calcula dónde aparece una ventana recién abierta.
+ *
+ * Con ventana en foco: en cascada, {@link NEW_WINDOW_DISPLACEMENT} px más abajo y a la derecha.
+ * Sin ventana en foco: centrada en horizontal y a un cuarto de la altura.
+ * Se redondea para no quedar en medio píxel y se ajusta con {@link clampPosition}.
+ *
+ * @param focused - Esquina superior izquierda de la ventana en foco, o null si no hay.
+ * @param size - Tamaño de la ventana nueva.
+ * @param area - Tamaño del escritorio.
+ * @param minLeft - Píxeles visibles al salir por la izquierda (se pasa a {@link clampPosition}).
+ * @returns La posición inicial de la ventana, ya dentro del área.
+ */
+export function nextPosition(focused: WindowPosition | null, size: Size, area: Size, minLeft = WINDOW_MIN_VISIBLE): WindowPosition {
+    const positionX = focused ? focused.x + NEW_WINDOW_DISPLACEMENT : (area.width - size.width) / 2
+    const positionY = focused ? focused.y + NEW_WINDOW_DISPLACEMENT : area.height / 4
+
+    return clampPosition({x: Math.round(positionX), y: Math.round(positionY)}, size, area, minLeft)
 }

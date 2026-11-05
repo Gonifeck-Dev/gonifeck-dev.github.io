@@ -1,7 +1,7 @@
 import {useCallback, useState} from "react"
 import type {AppData} from "@/features/desktop/types/app.ts"
 import type {WindowState} from "@/features/desktop/types/window.ts"
-import type {Point} from "@/features/desktop/utils/position.ts"
+import type {WindowPosition} from "@/features/desktop/utils/position.ts"
 
 // ESTADO de las ventanas: cuáles están abiertas, su orden (z), si están minimizadas,
 // su posición y cuál está activa. No toca el DOM: las posiciones las calcula quien llama
@@ -35,7 +35,7 @@ export function useWindows(apps: AppData[]) {
         setActiveId(null)
     }
 
-    function setPosition(id: string, position: Point) {
+    function setPosition(id: string, position: WindowPosition) {
         setWindows(prev => prev.map(w => w.id === id ? {...w, position} : w))
     }
 
@@ -43,9 +43,9 @@ export function useWindows(apps: AppData[]) {
     // de la anterior como "en foco" (así salen en cascada). calculate decide dónde va.
     // useCallback: la función es la misma en cada render, así los efectos de useDesktopLayout
     // que la usan no se vuelven a ejecutar sin necesidad (solo depende de setWindows, que es estable).
-    const placeNew = useCallback((calculate: (id: string, focused: Point | null) => Point) => {
+    const placeNew = useCallback((calculate: (id: string, focused: WindowPosition | null) => WindowPosition) => {
         setWindows(prev => {
-            let focused: Point | null = null
+            let focused: WindowPosition | null = null
             return prev.map(w => {
                 if (w.position) {
                     focused = w.position
@@ -60,7 +60,7 @@ export function useWindows(apps: AppData[]) {
 
     // Recalcula la posición de todas (p. ej. al cambiar el tamaño del área).
     // Si ninguna cambia, devuelve el mismo estado y React no vuelve a dibujar.
-    const keepInside = useCallback((calculate: (id: string, position: Point) => Point) => {
+    const keepInside = useCallback((calculate: (id: string, position: WindowPosition) => WindowPosition) => {
         setWindows(prev => {
             let moved = false
             const next = prev.map(w => {

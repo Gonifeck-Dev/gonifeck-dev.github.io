@@ -1,13 +1,13 @@
 import {useEffect, useLayoutEffect, useRef} from "react"
 import type {WindowState} from "@/features/desktop/types/window.ts"
-import {clampPosition, MIN_VISIBLE, nextPosition} from "@/features/desktop/utils/position.ts"
-import type {Point, Size} from "@/features/desktop/utils/position.ts"
+import {clampPosition, WINDOW_MIN_VISIBLE, nextPosition} from "@/features/desktop/utils/position.ts"
+import type {WindowPosition, Size} from "@/features/desktop/utils/position.ts"
 
 // Lo que este hook necesita de useWindows (solo las acciones que usa)
 type WindowActions = {
-    setPosition: (id: string, position: Point) => void
-    placeNew: (calculate: (id: string, focused: Point | null) => Point) => void
-    keepInside: (calculate: (id: string, position: Point) => Point) => void
+    setPosition: (id: string, position: WindowPosition) => void
+    placeNew: (calculate: (id: string, focused: WindowPosition | null) => WindowPosition) => void
+    keepInside: (calculate: (id: string, position: WindowPosition) => WindowPosition) => void
 }
 
 // DOM del escritorio: guarda las referencias a los elementos, mide el área y las ventanas,
@@ -36,7 +36,7 @@ export function useDesktopLayout(windows: WindowState[], {setPosition, placeNew,
     // Mínimo visible por la izquierda: los botones _ □ X completos + una base para agarrar
     function getMinLeft(id: string): number {
         const controls = windowRefs.current.get(id)?.querySelector<HTMLElement>(".window-controls")
-        return (controls?.offsetWidth ?? 0) + MIN_VISIBLE
+        return (controls?.offsetWidth ?? 0) + WINDOW_MIN_VISIBLE
     }
 
     // Callback refs: React llama con el elemento al aparecer y con null al desaparecer
@@ -80,7 +80,7 @@ export function useDesktopLayout(windows: WindowState[], {setPosition, placeNew,
 
     // Al empezar a arrastrar se dimensiona el marco invisible de esa ventana: es la caja donde
     // la ventana entera debe caber para cumplir la regla (izquierda: _ □ X + base; arriba: 0;
-    // derecha y abajo: MIN_VISIBLE). react-rnd lo mide justo después y limita el arrastre por
+    // derecha y abajo: WINDOW_MIN_VISIBLE). react-rnd lo mide justo después y limita el arrastre por
     // su cuenta, eje por eje y sin saltos: al volver de un borde, la ventana espera al puntero.
     function startDrag(id: string) {
         const box = boundsRefs.current.get(id)
@@ -90,12 +90,12 @@ export function useDesktopLayout(windows: WindowState[], {setPosition, placeNew,
         const left = getMinLeft(id) - size.width
         box.style.left = `${left}px`
         box.style.top = "0px"
-        box.style.width = `${area.width - MIN_VISIBLE + size.width - left}px`
-        box.style.height = `${area.height - MIN_VISIBLE + size.height}px`
+        box.style.width = `${area.width - WINDOW_MIN_VISIBLE + size.width - left}px`
+        box.style.height = `${area.height - WINDOW_MIN_VISIBLE + size.height}px`
     }
 
     // Guarda la posición; clampPosition es una red de seguridad (react-rnd ya respeta el marco)
-    function drag(id: string, position: Point) {
+    function drag(id: string, position: WindowPosition) {
         setPosition(id, clampPosition(position, getSize(id), getArea(), getMinLeft(id)))
     }
 
