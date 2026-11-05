@@ -1,5 +1,5 @@
 import type {Meta, StoryObj} from "@storybook/react-vite"
-import AboutMe from "./AboutMe.tsx"
+import AboutMe from "@/features/about-me/components/AboutMe.tsx"
 import AppWindow from "@/components/AppWindow/AppWindow.tsx"
 
 const meta = {
