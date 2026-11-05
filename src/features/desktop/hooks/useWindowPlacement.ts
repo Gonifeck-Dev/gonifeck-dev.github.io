@@ -2,6 +2,7 @@ import {useEffect, useLayoutEffect, useRef} from "react"
 import type {WindowState} from "@/features/desktop/types/window.ts"
 import {clampPosition, WINDOW_MIN_VISIBLE, nextPosition} from "@/features/desktop/utils/position.ts"
 import type {WindowPosition, Size} from "@/features/desktop/utils/position.ts"
+import {measureArea, measureMinVisibleLeft, measureSize} from "@/features/desktop/utils/measure.ts"
 
 type WindowActions = {
     setPosition: (id: string, position: WindowPosition) => void
@@ -19,33 +20,28 @@ type WindowActions = {
  * @returns Refs para conectar en Desktop (capa, barra de tareas, cada ventana y su marco)
  *   y los manejadores del arrastre (`startDrag`, `drag`).
  */
-export function useDesktopLayout(windows: WindowState[], {setPosition, placeNew, keepInside}: WindowActions) {
+export function useWindowPlacement(windows: WindowState[], {setPosition, placeNew, keepInside}: WindowActions) {
     const layerRef = useRef<HTMLDivElement>(null)
     const taskBarRef = useRef<HTMLDivElement>(null)
     const windowRefs = useRef(new Map<string, HTMLDivElement>())
     const boundsRefs = useRef(new Map<string, HTMLDivElement>())
 
-    // Área de trabajo: la capa de ventanas sin la barra de tareas
     function getArea(): Size {
-        const layerRect = layerRef.current?.getBoundingClientRect()
-        const taskBarRect = taskBarRef.current?.getBoundingClientRect()
-        if (!layerRect) return {width: 0, height: 0}
-        const areaBottom = taskBarRect?.top ?? layerRect.bottom
-        return {width: layerRect.width, height: areaBottom - layerRect.top}
+        const layer = layerRef.current
+        return layer ? measureArea(layer, taskBarRef.current) : {width: 0, height: 0}
     }
 
     function getSize(id: string): Size {
         const windowNode = windowRefs.current.get(id)
-        return {width: windowNode?.offsetWidth ?? 0, height: windowNode?.offsetHeight ?? 0}
+        return windowNode ? measureSize(windowNode) : {width: 0, height: 0}
     }
 
-    // Píxeles visibles por la izquierda: los botones _ □ X más WINDOW_MIN_VISIBLE
     function getMinLeft(id: string): number {
-        const controls = windowRefs.current.get(id)?.querySelector<HTMLElement>(".window-controls")
-        return (controls?.offsetWidth ?? 0) + WINDOW_MIN_VISIBLE
+        const windowNode = windowRefs.current.get(id)
+        return windowNode ? measureMinVisibleLeft(windowNode) : WINDOW_MIN_VISIBLE
     }
 
-    // Refs por id: guardan el nodo al montarse y lo borran al desmontarse
+    // Refs por ID: guardan el nodo al montarse y lo borran al desmontarse
     function windowRef(id: string) {
         return (node: HTMLDivElement | null) => {
             if (node) windowRefs.current.set(id, node)
@@ -95,7 +91,6 @@ export function useDesktopLayout(windows: WindowState[], {setPosition, placeNew,
         boundsBox.style.height = `${area.height - WINDOW_MIN_VISIBLE + height}px`
     }
 
-    // clampPosition es una red de seguridad: react-rnd ya respeta el marco
     function drag(id: string, position: WindowPosition) {
         setPosition(id, clampPosition(position, getSize(id), getArea(), getMinLeft(id)))
     }

@@ -7,7 +7,7 @@ import Button from "@/components/Button/Button.tsx"
 import AppWindow from "@/components/AppWindow/AppWindow.tsx"
 import type {AppData} from "@/features/desktop/types/app.ts"
 import {useWindows} from "@/features/desktop/hooks/useWindows.ts"
-import {useDesktopLayout} from "@/features/desktop/hooks/useDesktopLayout.ts"
+import {useWindowPlacement} from "@/features/desktop/hooks/useWindowPlacement.ts"
 
 type DesktopProps = {
     /** Apps que el escritorio puede mostrar como ventanas. */
@@ -16,12 +16,12 @@ type DesktopProps = {
 
 /**
  * Escritorio: fondo, ventanas arrastrables y barra de tareas.
- * El estado vive en useWindows y la medición del DOM en useDesktopLayout.
+ * El estado vive en useWindows y la medición del DOM en useWindowPlacement.
  */
 function Desktop({apps}: DesktopProps) {
     const {windows, activeId, activate, deactivate, setPosition, placeNew, keepInside} = useWindows(apps)
     const {layerRef, taskBarRef, windowRef, boundsRef, startDrag, drag} =
-        useDesktopLayout(windows, {setPosition, placeNew, keepInside})
+        useWindowPlacement(windows, {setPosition, placeNew, keepInside})
 
     function getApp(appId: string) {
         return apps.find(app => app.id === appId)

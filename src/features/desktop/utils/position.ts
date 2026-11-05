@@ -7,7 +7,7 @@ export type Size = { width: number, height: number }
 
 /**
  * Píxeles de la ventana que siempre quedan dentro del área por la derecha y por abajo.
- * Por la izquierda se suman los botones _ □ X (ver getMinLeft en useDesktopLayout).
+ * Por la izquierda se suman los botones _ □ X (ver getMinLeft en useWindowPlacement).
  */
 export const WINDOW_MIN_VISIBLE = 80
 /** Píxeles que se desplaza cada ventana nueva respecto de la anterior. */

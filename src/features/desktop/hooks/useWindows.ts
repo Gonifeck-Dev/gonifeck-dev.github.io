@@ -5,7 +5,7 @@ import type {WindowPosition} from "@/features/desktop/utils/position.ts"
 
 /**
  * Estado de las ventanas abiertas y de cuál está activa. No mide el DOM: las posiciones
- * llegan calculadas desde useDesktopLayout.
+ * llegan calculadas desde useWindowPlacement.
  *
  * @param apps - Catálogo de apps. Al cargar se abren las que tienen `openAtStart`, en su orden.
  * @returns `windows` y `activeId` (null si ninguna está activa), y las acciones para cambiarlos.
@@ -48,7 +48,7 @@ export function useWindows(apps: AppData[]) {
      * Cada una recibe la posición de la anterior, para salir en cascada.
      */
     const placeNew = useCallback((calculatePosition: (id: string, previousPosition: WindowPosition | null) => WindowPosition) => {
-        // useCallback: useDesktopLayout usa placeNew y keepInside como dependencias de sus efectos
+        // useCallback: useWindowPlacement usa placeNew y keepInside como dependencias de sus efectos
         setWindows(previousWindows => {
             let previousPosition: WindowPosition | null = null
             return previousWindows.map(windowState => {

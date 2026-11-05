@@ -22,7 +22,7 @@
         isolation: isolate;
     }
 
-    /* Marco invisible de cada ventana: react-rnd lo usa como límite al arrastrar (useDesktopLayout lo dimensiona) */
+    /* Marco invisible de cada ventana: react-rnd lo usa como límite al arrastrar (useWindowPlacement lo dimensiona) */
     .desktop-window-bounds {
         position: absolute;
         visibility: hidden;
