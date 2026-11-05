@@ -1,13 +1,13 @@
 import {Fragment} from "react"
 import {Rnd} from "react-rnd"
-import "./Desktop.css"
-import LightBeam from "@/features/desktop/components/LightBeam.tsx"
-import TaskBar from "@/features/desktop/components/TaskBar.tsx"
-import Button from "@/components/Button/Button.tsx"
-import AppWindow from "@/components/AppWindow/AppWindow.tsx"
+import "./desktop.css"
+import LightBeam from "@/features/desktop/components/light-beam.tsx"
+import TaskBar from "@/features/desktop/components/task-bar.tsx"
+import Button from "@/components/button/button.tsx"
+import AppWindow from "@/components/app-window/app-window.tsx"
 import type {AppData} from "@/features/desktop/types/app.ts"
-import {useWindows} from "@/features/desktop/hooks/useWindows.ts"
-import {useWindowPlacement} from "@/features/desktop/hooks/useWindowPlacement.ts"
+import {useWindows} from "@/features/desktop/hooks/use-windows.ts"
+import {useWindowPlacement} from "@/features/desktop/hooks/use-window-placement.ts"
 
 type DesktopProps = {
     /** Apps que el escritorio puede mostrar como ventanas. */

@@ -1,4 +1,4 @@
-import "./Button.css"
+import "./button.css"
 
 type Variant = "normal" | "small" | "medium" | "large"
 type Emphasis = "primary" | "secondary"

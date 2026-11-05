@@ -1,4 +1,4 @@
-import "./LightBeam.css"
+import "./light-beam.css"
 
 /** Haz de luz decorativo que entra por una ventana de 4 cristales. */
 function LightBeam() {

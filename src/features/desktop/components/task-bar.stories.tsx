@@ -1,6 +1,6 @@
 import type {Meta, StoryObj} from "@storybook/react-vite"
-import TaskBar from "@/features/desktop/components/TaskBar.tsx"
-import Button from "@/components/Button/Button.tsx"
+import TaskBar from "@/features/desktop/components/task-bar.tsx"
+import Button from "@/components/button/button.tsx"
 
 const meta = {
     title: "Escritorio/Barra de tareas",

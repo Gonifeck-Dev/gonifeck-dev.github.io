@@ -1,5 +1,5 @@
 import type {ReactNode} from "react"
-import "./Monitor.css"
+import "./monitor.css"
 
 type MonitorProps = {
     children?: ReactNode

@@ -1,5 +1,5 @@
 import type {ReactNode} from "react"
-import type {MenuData, StatusData} from "@/components/AppWindow/AppWindow.tsx"
+import type {MenuData, StatusData} from "@/components/app-window/app-window.tsx"
 
 /** Una app que el escritorio puede abrir como ventana. Se declaran en src/app/catalog.tsx. */
 export type AppData = {

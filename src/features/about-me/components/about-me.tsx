@@ -1,5 +1,5 @@
-import "./AboutMe.css"
-import Button from "@/components/Button/Button.tsx"
+import "./about-me.css"
+import Button from "@/components/button/button.tsx"
 
 const aboutMeInfo = {
     command: "C:\\> whoami.bat",

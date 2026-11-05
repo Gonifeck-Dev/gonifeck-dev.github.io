@@ -1,5 +1,5 @@
 import type {Meta, StoryObj} from "@storybook/react-vite"
-import AppWindow from "@/components/AppWindow/AppWindow.tsx"
+import AppWindow from "@/components/app-window/app-window.tsx"
 
 const meta = {
     title: "Escritorio/Ventana",

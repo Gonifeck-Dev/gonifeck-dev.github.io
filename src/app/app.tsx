@@ -1,5 +1,5 @@
-import Desktop from "@/features/desktop/components/Desktop.tsx"
-import Monitor from "@/components/Monitor/Monitor.tsx"
+import Desktop from "@/features/desktop/components/desktop.tsx"
+import Monitor from "@/components/monitor/monitor.tsx"
 import {apps} from "@/app/catalog.tsx"
 
 function App() {
