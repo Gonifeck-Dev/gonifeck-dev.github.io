@@ -36,7 +36,7 @@ export function useWindowPlacement(windows: WindowState[], {setPosition, placeNe
         return windowNode ? measureSize(windowNode) : {width: 0, height: 0}
     }
 
-    function getMinLeft(id: string): number {
+    function getMinVisibleLeft(id: string): number {
         const windowNode = windowRefs.current.get(id)
         return windowNode ? measureMinVisibleLeft(windowNode) : WINDOW_MIN_VISIBLE
     }
@@ -62,7 +62,7 @@ export function useWindowPlacement(windows: WindowState[], {setPosition, placeNe
         const allWindowsPlaced = windows.every(windowState => windowState.position !== null)
         if (allWindowsPlaced) return
         const area = getArea()
-        placeNew((id, previousPosition) => nextPosition(previousPosition, getSize(id), area, getMinLeft(id)))
+        placeNew((id, previousPosition) => nextPosition(previousPosition, getSize(id), area, getMinVisibleLeft(id)))
     }, [windows, placeNew])
 
     // Si la capa de ventanas cambia de tamaño, devuelve al área las ventanas que quedaron fuera
@@ -71,7 +71,7 @@ export function useWindowPlacement(windows: WindowState[], {setPosition, placeNe
         if (!layer) return
         const observer = new ResizeObserver(() => {
             const area = getArea()
-            keepInside((id, position) => clampPosition(position, getSize(id), area, getMinLeft(id)))
+            keepInside((id, position) => clampPosition(position, getSize(id), area, getMinVisibleLeft(id)))
         })
         observer.observe(layer)
         return () => observer.disconnect()
@@ -83,7 +83,7 @@ export function useWindowPlacement(windows: WindowState[], {setPosition, placeNe
         const boundsBox = boundsRefs.current.get(id)
         if (!boundsBox) return
         const {width, height} = getSize(id)
-        const {minX, maxX, minY, maxY} = windowLimits({width, height}, getArea(), getMinLeft(id))
+        const {minX, maxX, minY, maxY} = windowLimits({width, height}, getArea(), getMinVisibleLeft(id))
         boundsBox.style.left = `${minX}px`
         boundsBox.style.top = `${minY}px`
         boundsBox.style.width = `${maxX + width - minX}px`
@@ -91,7 +91,7 @@ export function useWindowPlacement(windows: WindowState[], {setPosition, placeNe
     }
 
     function drag(id: string, position: WindowPosition) {
-        setPosition(id, clampPosition(position, getSize(id), getArea(), getMinLeft(id)))
+        setPosition(id, clampPosition(position, getSize(id), getArea(), getMinVisibleLeft(id)))
     }
 
     return {layerRef, taskBarRef, windowRef, boundsRef, startDrag, drag}

@@ -7,7 +7,7 @@ export type Size = { width: number, height: number }
 
 /**
  * Píxeles de la ventana que siempre quedan dentro del área por la derecha y por abajo.
- * Por la izquierda se suman los botones _ □ X (ver getMinLeft en useWindowPlacement).
+ * Por la izquierda se suman los botones _ □ X (ver getMinVisibleLeft en useWindowPlacement).
  */
 export const WINDOW_MIN_VISIBLE = 80
 /** Píxeles que se desplaza cada ventana nueva respecto de la anterior. */
@@ -19,12 +19,12 @@ export const NEW_WINDOW_DISPLACEMENT = 24
  *
  * @param size - Tamaño de la ventana.
  * @param area - Tamaño del escritorio.
- * @param minLeft - Píxeles visibles al salir por la izquierda.
+ * @param minVisibleLeft - Píxeles visibles al salir por la izquierda.
  * @returns `minX`/`maxX` y `minY`/`maxY`: hasta dónde puede ir la esquina en cada eje.
  */
-export function windowLimits(size: Size, area: Size, minLeft = WINDOW_MIN_VISIBLE) {
+export function windowLimits(size: Size, area: Size, minVisibleLeft = WINDOW_MIN_VISIBLE) {
     return {
-        minX: minLeft - size.width,
+        minX: minVisibleLeft - size.width,
         maxX: area.width - WINDOW_MIN_VISIBLE,
         minY: 0,
         maxY: area.height - WINDOW_MIN_VISIBLE,
@@ -40,11 +40,11 @@ export function windowLimits(size: Size, area: Size, minLeft = WINDOW_MIN_VISIBL
  * @param position - Posición que se quiere dar a la ventana (esquina superior izquierda).
  * @param size - Tamaño de la ventana.
  * @param area - Tamaño del escritorio.
- * @param minLeft - Píxeles visibles al salir por la izquierda.
+ * @param minVisibleLeft - Píxeles visibles al salir por la izquierda.
  * @returns La posición corregida.
  */
-export function clampPosition(position: WindowPosition, size: Size, area: Size, minLeft = WINDOW_MIN_VISIBLE): WindowPosition {
-    const {minX, maxX, minY, maxY} = windowLimits(size, area, minLeft)
+export function clampPosition(position: WindowPosition, size: Size, area: Size, minVisibleLeft = WINDOW_MIN_VISIBLE): WindowPosition {
+    const {minX, maxX, minY, maxY} = windowLimits(size, area, minVisibleLeft)
 
     return {
         x: clamp(position.x, minX, maxX),
@@ -62,12 +62,12 @@ export function clampPosition(position: WindowPosition, size: Size, area: Size, 
  * @param previousPosition - Esquina superior izquierda de la ventana anterior en la lista, o null si es la primera.
  * @param size - Tamaño de la ventana nueva.
  * @param area - Tamaño del escritorio.
- * @param minLeft - Píxeles visibles al salir por la izquierda (se pasa a {@link clampPosition}).
+ * @param minVisibleLeft - Píxeles visibles al salir por la izquierda (se pasa a {@link clampPosition}).
  * @returns La posición inicial de la ventana, ya dentro del área.
  */
-export function nextPosition(previousPosition: WindowPosition | null, size: Size, area: Size, minLeft = WINDOW_MIN_VISIBLE): WindowPosition {
+export function nextPosition(previousPosition: WindowPosition | null, size: Size, area: Size, minVisibleLeft = WINDOW_MIN_VISIBLE): WindowPosition {
     const positionX = previousPosition ? previousPosition.x + NEW_WINDOW_DISPLACEMENT : (area.width - size.width) / 2
     const positionY = previousPosition ? previousPosition.y + NEW_WINDOW_DISPLACEMENT : area.height / 4
 
-    return clampPosition({x: Math.round(positionX), y: Math.round(positionY)}, size, area, minLeft)
+    return clampPosition({x: Math.round(positionX), y: Math.round(positionY)}, size, area, minVisibleLeft)
 }
